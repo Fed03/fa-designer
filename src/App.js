@@ -1,25 +1,20 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+// import jsonn from "./dummydata.json";
+// import { store } from "./Services/Store";
+import { Background } from "./Background";
 
 class App extends Component {
+  // store = store;
+  svgHeight = 1000;
+  svgWidth = 1200;
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <svg width={this.svgWidth} height={this.svgHeight}>
+          <Background width={this.svgWidth} height={this.svgHeight} />
+        </svg>
       </div>
     );
   }
