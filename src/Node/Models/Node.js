@@ -7,11 +7,10 @@ class Node {
    * @param {number} xCoord
    * @param {number} yCoord
    */
-  constructor(data, xCoord, yCoord, isFinal = false) {
+  constructor(data, xCoord, yCoord) {
     this.data = data;
     this.x = xCoord;
     this.y = yCoord;
-    this.isFinal = isFinal;
   }
 
   get id() {
