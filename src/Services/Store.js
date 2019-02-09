@@ -19,8 +19,19 @@ class Store {
   }
 
   createNode([x, y]) {
+    this.deselectAllNodes();
+
     const data = new NodeData(uuid(), "", false, false);
-    this.nodes.push(new Node(data, x, y));
+    const node = new Node(data, x, y);
+    node.selected = true;
+
+    this.nodes.push(node);
+
+    return node;
+  }
+
+  removeNode(node) {
+    this.nodes.splice(this.nodes.findIndex(n => n.id === node.id), 1);
   }
 
   deselectAllNodes() {

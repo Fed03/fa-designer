@@ -43,7 +43,8 @@ class App extends Component {
         key={node.id}
         model={node}
         nodeRadius={50}
-        nodeClicked={this.handleNodeClicked.bind(this)}
+        onNodeSelection={this.handleNodeClicked.bind(this)}
+        onNodeDeletion={this.deleteNode.bind(this)}
       />
     ));
   }
@@ -51,6 +52,13 @@ class App extends Component {
   handleNodeClicked(node) {
     this.store.deselectAllNodes();
     node.selected = true;
+    this.setState({
+      nodes: this.store.nodes
+    });
+  }
+
+  deleteNode(node) {
+    this.store.removeNode(node);
     this.setState({
       nodes: this.store.nodes
     });
@@ -64,6 +72,7 @@ class App extends Component {
             <ArrowHead markerSize={10} />
           </defs>
           <Background width={this.svgWidth} height={this.svgHeight} />
+
           <Group>{this.renderNodes()}</Group>
         </svg>
       </div>

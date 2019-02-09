@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import AnchorPoint from "./AnchorPoint";
+import KeyHandler, { KEYDOWN } from "react-key-handler";
 
 class Node extends Component {
   constructor(props) {
@@ -22,13 +23,27 @@ class Node extends Component {
   }
 
   handleClick() {
-    this.props.nodeClicked(this.props.model);
+    if (!this.props.model.selected) {
+      this.props.onNodeSelection(this.props.model);
+    }
+  }
+
+  handleKeyboard(evt) {
+    evt.preventDefault();
+    if (this.props.model.selected) {
+      this.props.onNodeDeletion(this.props.model);
+    }
   }
 
   render() {
     const { model: node, nodeRadius } = this.props;
     return (
       <g id={node.id} className="node-group">
+        <KeyHandler
+          keyEventName={KEYDOWN}
+          keyValue="Delete"
+          onKeyHandle={this.handleKeyboard.bind(this)}
+        />
         <circle
           className="node"
           cx={node.x}
