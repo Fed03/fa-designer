@@ -22,6 +22,10 @@ class Store {
     const data = new NodeData(uuid(), "", false, false);
     this.nodes.push(new Node(data, x, y));
   }
+
+  deselectAllNodes() {
+    this.nodes.forEach(node => (node.selected = false));
+  }
 }
 
 const store = new Store();

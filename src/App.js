@@ -39,8 +39,21 @@ class App extends Component {
   renderNodes() {
     const { nodes } = this.state;
     return nodes.map(node => (
-      <Node key={node.id} model={node} nodeRadius={50} />
+      <Node
+        key={node.id}
+        model={node}
+        nodeRadius={50}
+        nodeClicked={this.handleNodeClicked.bind(this)}
+      />
     ));
+  }
+
+  handleNodeClicked(node) {
+    this.store.deselectAllNodes();
+    node.selected = true;
+    this.setState({
+      nodes: this.store.nodes
+    });
   }
 
   render() {

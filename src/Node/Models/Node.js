@@ -11,6 +11,7 @@ class Node {
     this.data = data;
     this.x = xCoord;
     this.y = yCoord;
+    this.selected = false;
   }
 
   get id() {

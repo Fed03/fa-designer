@@ -21,6 +21,10 @@ class Node extends Component {
     });
   }
 
+  handleClick() {
+    this.props.nodeClicked(this.props.model);
+  }
+
   render() {
     const { model: node, nodeRadius } = this.props;
     return (
@@ -30,9 +34,10 @@ class Node extends Component {
           cx={node.x}
           cy={node.y}
           r={nodeRadius}
-          fill="red"
+          fill={node.selected ? "blue" : "red"}
           onMouseEnter={this.handleMouseEnter.bind(this)}
           onMouseLeave={this.handleMouseLeave.bind(this)}
+          onClick={this.handleClick.bind(this)}
         />
         {this.renderAnchorPoints()}
       </g>
