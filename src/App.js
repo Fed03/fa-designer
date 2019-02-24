@@ -43,13 +43,13 @@ class App extends Component {
         key={node.id}
         model={node}
         nodeRadius={50}
-        onNodeSelection={this.handleNodeClicked.bind(this)}
+        onNodeSelection={this.selectNode.bind(this)}
         onNodeDeletion={this.deleteNode.bind(this)}
       />
     ));
   }
 
-  handleNodeClicked(node) {
+  selectNode(node) {
     this.store.deselectAllNodes();
     node.selected = true;
     this.setState({
