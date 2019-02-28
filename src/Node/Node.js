@@ -10,9 +10,13 @@ class Node extends Component {
     };
   }
 
-  handleEdgeCreation(targetPosition) {
-    this.props.handleEdgeCreation(this.props.model, targetPosition);
-  }
+  handleEdgeCreation = targetPosition => {
+    this.props.onEdgeCreation(this.props.model, targetPosition);
+  };
+
+  handleStartOfEdgeCreation = targetPosition => {
+    this.props.onEdgeCreationStart(this.props.model, targetPosition);
+  };
 
   handleMouseEnter() {
     this.setState({
@@ -70,7 +74,9 @@ class Node extends Component {
         <AnchorPoint
           key={i}
           node={model}
-          handleEdgeCreation={this.handleEdgeCreation.bind(this)}
+          onEdgeCreationStart={this.handleStartOfEdgeCreation}
+          onEdgeCreation={this.handleEdgeCreation}
+          onEdgeCreationEnd={this.props.onEdgeCreationEnd}
           //display={this.state.showAnchorPoints ? "inline" : "none"}
           cx={x}
           cy={y}

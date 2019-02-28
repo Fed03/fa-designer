@@ -47,7 +47,9 @@ class App extends Component {
         key={node.id}
         model={node}
         nodeRadius={config.nodeRadius}
-        handleEdgeCreation={this.handleEdgeCreation.bind(this)}
+        onEdgeCreationStart={this.handleStartOfEdgeCreation}
+        onEdgeCreation={this.handleEdgeCreation}
+        onEdgeCreationEnd={this.handleEndOfEdgeCreation}
         onNodeSelection={this.selectNode.bind(this)}
         onNodeDeletion={this.deleteNode.bind(this)}
       />
@@ -76,21 +78,37 @@ class App extends Component {
     });
   }
 
-  handleEdgeCreation(srcNode, targetPosition) {
+  handleStartOfEdgeCreation = (srcNode, targetPosition) => {
+    const { edges } = this.state;
+
     const path = PathGenerator.newEdgePath(srcNode.position, targetPosition);
-    let edges = this.state.edges;
-    let creationEdge = edges.find(x => x.id === config.edge.creationId);
+    edges.push(new BaseEdge(config.edge.creationId, path));
+
+    this.setState({ edges });
+  };
+
+  handleEdgeCreation = (srcNode, targetPosition) => {
+    const { edges } = this.state;
+
+    const path = PathGenerator.newEdgePath(srcNode.position, targetPosition);
+    const creationEdge = edges.find(x => x.id === config.edge.creationId);
+
     if (!creationEdge) {
-      creationEdge = new BaseEdge(config.edge.creationId, path);
-      edges.push(creationEdge);
-    } else {
-      creationEdge.pathDefinition = path;
+      return;
     }
 
-    this.setState({
-      edges
-    });
-  }
+    creationEdge.pathDefinition = path;
+
+    this.setState({ edges });
+  };
+
+  handleEndOfEdgeCreation = () => {
+    const { edges } = this.state;
+    const edgesWithoutCreationOne = edges.filter(
+      edge => edge.id !== config.edge.creationId
+    );
+    this.setState({ edges: edgesWithoutCreationOne });
+  };
 
   render() {
     return (
