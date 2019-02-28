@@ -18,17 +18,19 @@ class Node extends Component {
     this.props.onEdgeCreationStart(this.props.model, targetPosition);
   };
 
-  handleMouseEnter() {
+  handleMouseEnter = () => {
+    this.props.onMouseEnter(this.props.model);
     this.setState({
       showAnchorPoints: true
     });
-  }
+  };
 
-  handleMouseLeave() {
+  handleMouseLeave = () => {
+    this.props.onMouseLeave(this.props.model);
     this.setState({
       showAnchorPoints: false
     });
-  }
+  };
 
   handleClick() {
     if (!this.props.model.selected) {
@@ -58,8 +60,8 @@ class Node extends Component {
           cy={node.y}
           r={nodeRadius}
           fill={node.selected ? "blue" : "red"}
-          onMouseEnter={this.handleMouseEnter.bind(this)}
-          onMouseLeave={this.handleMouseLeave.bind(this)}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
           onClick={this.handleClick.bind(this)}
         />
         {this.renderAnchorPoints()}

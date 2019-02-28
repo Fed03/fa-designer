@@ -9,7 +9,8 @@ import { Group } from "@vx/group";
 import { Node } from "./Node";
 import config from "./Config";
 import { PathGenerator, EdgeComponent } from "./Edge";
-import { BaseEdge } from "./Edge/Models";
+import { BaseEdge, Edge, EdgeData } from "./Edge/Models";
+import uuid from "uuid/v1";
 
 class App extends Component {
   store = store;
@@ -21,7 +22,9 @@ class App extends Component {
     super(props);
     this.state = {
       nodes: this.store.nodes,
-      edges: []
+      edges: [],
+      candidateSrcNode: null,
+      candidateTrgNode: null
     };
   }
 
@@ -52,9 +55,19 @@ class App extends Component {
         onEdgeCreationEnd={this.handleEndOfEdgeCreation}
         onNodeSelection={this.selectNode.bind(this)}
         onNodeDeletion={this.deleteNode.bind(this)}
+        onMouseEnter={this.handleNodeMouseEnter}
+        onMouseLeave={this.handleNodeMouseLeave}
       />
     ));
   }
+
+  handleNodeMouseEnter = node => {
+    this.setState({ candidateTrgNode: node });
+  };
+
+  handleNodeMouseLeave = () => {
+    this.setState({ candidateTrgNode: null });
+  };
 
   renderEdges() {
     const { edges } = this.state;
@@ -81,22 +94,27 @@ class App extends Component {
   handleStartOfEdgeCreation = (srcNode, targetPosition) => {
     const { edges } = this.state;
 
-    const path = PathGenerator.newEdgePath(srcNode.position, targetPosition);
+    const path = PathGenerator.creationEdgePath(
+      srcNode.position,
+      targetPosition
+    );
     edges.push(new BaseEdge(config.edge.creationId, path));
 
-    this.setState({ edges });
+    this.setState({ edges, candidateSrcNode: srcNode });
   };
 
   handleEdgeCreation = (srcNode, targetPosition) => {
     const { edges } = this.state;
 
-    const path = PathGenerator.newEdgePath(srcNode.position, targetPosition);
     const creationEdge = edges.find(x => x.id === config.edge.creationId);
-
     if (!creationEdge) {
       return;
     }
 
+    const path = PathGenerator.creationEdgePath(
+      srcNode.position,
+      targetPosition
+    );
     creationEdge.pathDefinition = path;
 
     this.setState({ edges });
@@ -108,7 +126,24 @@ class App extends Component {
       edge => edge.id !== config.edge.creationId
     );
     this.setState({ edges: edgesWithoutCreationOne });
+
+    if (this.state.candidateTrgNode) {
+      this.createNodesLink();
+    }
   };
+
+  createNodesLink() {
+    const { candidateSrcNode, candidateTrgNode, edges } = this.state;
+
+    const path = PathGenerator.edgePath(
+      candidateSrcNode.position,
+      candidateTrgNode.position
+    );
+    const data = new EdgeData(candidateSrcNode.id, candidateTrgNode.id);
+    edges.push(new Edge(uuid(), data, path));
+
+    this.setState({ edges, candidateSrcNode: null, candidateTrgNode: null });
+  }
 
   render() {
     return (

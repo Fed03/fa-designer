@@ -1,6 +1,6 @@
 import * as d3Shape from "d3-shape";
 import { Point2D, Shapes, Intersection } from "kld-intersections";
-import Config from "../Config";
+import config from "../Config";
 
 const PathGenerator = {
   _pathFactory: d3Shape
@@ -10,16 +10,16 @@ const PathGenerator = {
 
   _generateInterpolationPoints(srcPosition, trgPosition) {
     return [
-      this._calculateLineOrigin(srcPosition, trgPosition),
+      new Point2D(srcPosition.x, srcPosition.y),
       new Point2D(trgPosition.x, trgPosition.y)
     ];
   },
 
-  _calculateLineOrigin(srcPosition, trgPosition) {
-    let srcNodeShape = Shapes.circle(
-      srcPosition.x,
-      srcPosition.y,
-      Config.nodeRadius
+  _calculateLineEndPoint(srcPosition, trgPosition) {
+    let trgShape = Shapes.circle(
+      trgPosition.x,
+      trgPosition.y,
+      this._markerAwareRadius
     );
     let chord = Shapes.line(
       srcPosition.x,
@@ -28,12 +28,30 @@ const PathGenerator = {
       trgPosition.y
     );
 
-    return Intersection.intersect(srcNodeShape, chord).points[0];
+    return Intersection.intersect(trgShape, chord).points[0];
   },
 
-  newEdgePath(srcPosition, trgPosition) {
+  get _markerAwareRadius() {
+    const {
+      nodeRadius,
+      edge: { strokeWidth },
+      marker: { markerSize }
+    } = config;
+    return nodeRadius + (strokeWidth * markerSize) / 2;
+  },
+
+  creationEdgePath(srcPosition, trgPosition) {
     return this._pathFactory(
       this._generateInterpolationPoints(srcPosition, trgPosition)
+    );
+  },
+
+  edgePath(srcPosition, trgPosition) {
+    return this._pathFactory(
+      this._generateInterpolationPoints(
+        srcPosition,
+        this._calculateLineEndPoint(srcPosition, trgPosition)
+      )
     );
   }
 };
