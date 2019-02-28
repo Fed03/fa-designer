@@ -7,6 +7,7 @@ import { ArrowHead } from "./ArrowHead";
 import * as d3Selection from "d3-selection";
 import { Group } from "@vx/group";
 import { Node } from "./Node";
+import Config from "./Config";
 
 class App extends Component {
   store = store;
@@ -17,7 +18,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      nodes: this.store.nodes
+      nodes: this.store.nodes,
+      edges: []
     };
   }
 
@@ -42,7 +44,8 @@ class App extends Component {
       <Node
         key={node.id}
         model={node}
-        nodeRadius={50}
+        nodeRadius={Config.nodeRadius}
+        handleEdgeCreation={this.handleEdgeCreation.bind(this)}
         onNodeSelection={this.selectNode.bind(this)}
         onNodeDeletion={this.deleteNode.bind(this)}
       />
@@ -63,6 +66,8 @@ class App extends Component {
       nodes: this.store.nodes
     });
   }
+
+  handleEdgeCreation(srcNode, targetPosition) {}
 
   render() {
     return (

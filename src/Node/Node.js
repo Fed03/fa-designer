@@ -10,6 +10,10 @@ class Node extends Component {
     };
   }
 
+  handleEdgeCreation(targetPosition) {
+    this.props.handleEdgeCreation(this.props.model, targetPosition);
+  }
+
   handleMouseEnter() {
     this.setState({
       showAnchorPoints: true
@@ -66,6 +70,7 @@ class Node extends Component {
         <AnchorPoint
           key={i}
           node={model}
+          handleEdgeCreation={this.handleEdgeCreation.bind(this)}
           display={this.state.showAnchorPoints ? "inline" : "none"}
           cx={x}
           cy={y}
