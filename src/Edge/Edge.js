@@ -2,7 +2,20 @@ import React, { Component } from "react";
 
 class Edge extends Component {
   render() {
-    return <path d={this.props.model.pathDefinition} />;
+    const { model, config } = this.props;
+    return (
+      <path
+        d={model.pathDefinition}
+        stroke={config.edge.stroke}
+        strokeWidth={config.edge.strokeWidth}
+        markerEnd={this.markerRef}
+      />
+    );
+  }
+
+  get markerRef() {
+    const markerId = this.props.config.marker.elementId;
+    return `url(#${markerId})`;
   }
 }
 
