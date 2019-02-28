@@ -7,7 +7,7 @@ import { ArrowHead } from "./ArrowHead";
 import * as d3Selection from "d3-selection";
 import { Group } from "@vx/group";
 import { Node } from "./Node";
-import Config from "./Config";
+import config from "./Config";
 import { PathGenerator, EdgeComponent } from "./Edge";
 import { BaseEdge } from "./Edge/Models";
 
@@ -46,7 +46,7 @@ class App extends Component {
       <Node
         key={node.id}
         model={node}
-        nodeRadius={Config.nodeRadius}
+        nodeRadius={config.nodeRadius}
         handleEdgeCreation={this.handleEdgeCreation.bind(this)}
         onNodeSelection={this.selectNode.bind(this)}
         onNodeDeletion={this.deleteNode.bind(this)}
@@ -56,7 +56,9 @@ class App extends Component {
 
   renderEdges() {
     const { edges } = this.state;
-    return edges.map(edge => <EdgeComponent key={edge.id} model={edge} />);
+    return edges.map(edge => (
+      <EdgeComponent key={edge.id} model={edge} config={config} />
+    ));
   }
 
   selectNode(node) {
@@ -77,9 +79,9 @@ class App extends Component {
   handleEdgeCreation(srcNode, targetPosition) {
     const path = PathGenerator.newEdgePath(srcNode.position, targetPosition);
     let edges = this.state.edges;
-    let creationEdge = edges.find(x => x.id === Config.edgeForCreationId);
+    let creationEdge = edges.find(x => x.id === config.edge.creationId);
     if (!creationEdge) {
-      creationEdge = new BaseEdge(Config.edgeForCreationId, path);
+      creationEdge = new BaseEdge(config.edge.creationId, path);
       edges.push(creationEdge);
     } else {
       creationEdge.pathDefinition = path;
@@ -95,12 +97,16 @@ class App extends Component {
       <div>
         <svg ref={this.svgRef} width={this.svgWidth} height={this.svgHeight}>
           <defs>
-            <ArrowHead markerSize={10} />
+            <ArrowHead
+              markerSize={config.marker.markerSize}
+              id={config.marker.elementId}
+              markerColor={config.edge.stroke}
+            />
           </defs>
           <Background width={this.svgWidth} height={this.svgHeight} />
 
-          <Group>{this.renderNodes()}</Group>
           <g>{this.renderEdges()}</g>
+          <Group>{this.renderNodes()}</Group>
         </svg>
       </div>
     );

@@ -1,9 +1,6 @@
 import React, { Component } from "react";
 
 class ArrowHead extends Component {
-  static defaultProps = {
-    markerColor: "#222"
-  };
   get viewBox() {
     const { markerSize } = this.props;
     return `0 -${markerSize / 2} ${markerSize} ${markerSize}`;
@@ -21,7 +18,7 @@ class ArrowHead extends Component {
   render() {
     return (
       <marker
-        id="arrowhead-marker"
+        id={this.props.id}
         viewBox={this.viewBox}
         refX={this.refX}
         orient="auto"
