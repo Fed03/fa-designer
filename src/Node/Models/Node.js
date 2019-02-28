@@ -1,5 +1,6 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
 import { NodeData } from "./NodeData";
+import { Edge } from "../../Edge/Models";
 
 class Node {
   /**
@@ -20,6 +21,13 @@ class Node {
 
   get position() {
     return { x: this.x, y: this.y };
+  }
+
+  /**
+   * @param {Edge} edge
+   */
+  isPartOfEdge(edge) {
+    return edge.srcNodeId === this.id || edge.trgNodeId === this.id;
   }
 }
 

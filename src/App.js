@@ -1,31 +1,26 @@
 import React, { Component } from "react";
 import "./App.css";
 // import jsonn from "./dummydata.json";
-import { store } from "./Services/Store";
+import { Store } from "./Services/Store";
 import { Background } from "./Background";
 import { ArrowHead } from "./ArrowHead";
 import * as d3Selection from "d3-selection";
 import { Group } from "@vx/group";
 import { Node } from "./Node";
 import config from "./Config";
-import { PathGenerator, EdgeComponent } from "./Edge";
-import { BaseEdge, Edge, EdgeData } from "./Edge/Models";
-import uuid from "uuid/v1";
+import { Edge } from "./Edge";
 
 class App extends Component {
-  store = store;
   svgHeight = 1000;
   svgWidth = 1200;
   svgRef = React.createRef();
 
   constructor(props) {
     super(props);
-    this.state = {
-      nodes: this.store.nodes,
-      edges: [],
+    this.store = new Store(this, {
       candidateSrcNode: null,
       candidateTrgNode: null
-    };
+    });
   }
 
   componentDidMount() {
@@ -36,11 +31,8 @@ class App extends Component {
 
   addNewNode() {
     const position = d3Selection.mouse(d3Selection.event.currentTarget);
-    this.store.createNode(position);
-
-    this.setState({
-      nodes: this.store.nodes
-    });
+    const node = this.store.createNode(position);
+    this.store.selectNode(node);
   }
 
   renderNodes() {
@@ -72,78 +64,35 @@ class App extends Component {
   renderEdges() {
     const { edges } = this.state;
     return edges.map(edge => (
-      <EdgeComponent key={edge.id} model={edge} config={config} />
+      <Edge key={edge.id} model={edge} config={config} />
     ));
   }
 
   selectNode(node) {
-    this.store.deselectAllNodes();
-    node.selected = true;
-    this.setState({
-      nodes: this.store.nodes
-    });
+    this.store.selectNode(node);
   }
 
   deleteNode(node) {
     this.store.removeNode(node);
-    this.setState({
-      nodes: this.store.nodes
-    });
   }
 
   handleStartOfEdgeCreation = (srcNode, targetPosition) => {
-    const { edges } = this.state;
-
-    const path = PathGenerator.creationEdgePath(
-      srcNode.position,
-      targetPosition
-    );
-    edges.push(new BaseEdge(config.edge.creationId, path));
-
-    this.setState({ edges, candidateSrcNode: srcNode });
+    this.store.addCreationEdge(srcNode.position, targetPosition);
+    this.setState({ candidateSrcNode: srcNode });
   };
 
   handleEdgeCreation = (srcNode, targetPosition) => {
-    const { edges } = this.state;
-
-    const creationEdge = edges.find(x => x.id === config.edge.creationId);
-    if (!creationEdge) {
-      return;
-    }
-
-    const path = PathGenerator.creationEdgePath(
-      srcNode.position,
-      targetPosition
-    );
-    creationEdge.pathDefinition = path;
-
-    this.setState({ edges });
+    this.store.translateCreationEdge(srcNode.position, targetPosition);
   };
 
   handleEndOfEdgeCreation = () => {
-    const { edges } = this.state;
-    const edgesWithoutCreationOne = edges.filter(
-      edge => edge.id !== config.edge.creationId
-    );
-    this.setState({ edges: edgesWithoutCreationOne });
+    this.store.removeCreationEdge();
 
-    if (this.state.candidateTrgNode) {
-      this.createNodesLink();
+    const { candidateSrcNode, candidateTrgNode } = this.state;
+    if (candidateTrgNode) {
+      this.store.createNodesLink(candidateSrcNode, candidateTrgNode);
     }
   };
-
-  createNodesLink() {
-    const { candidateSrcNode, candidateTrgNode, edges } = this.state;
-
-    const path = PathGenerator.edgePath(
-      candidateSrcNode.position,
-      candidateTrgNode.position
-    );
-    const data = new EdgeData(candidateSrcNode.id, candidateTrgNode.id);
-    edges.push(new Edge(uuid(), data, path));
-
-    this.setState({ edges, candidateSrcNode: null, candidateTrgNode: null });
-  }
 
   render() {
     return (
