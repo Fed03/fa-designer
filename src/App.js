@@ -8,6 +8,8 @@ import * as d3Selection from "d3-selection";
 import { Group } from "@vx/group";
 import { Node } from "./Node";
 import Config from "./Config";
+import { PathGenerator, EdgeComponent } from "./Edge";
+import { BaseEdge } from "./Edge/Models";
 
 class App extends Component {
   store = store;
@@ -52,6 +54,11 @@ class App extends Component {
     ));
   }
 
+  renderEdges() {
+    const { edges } = this.state;
+    return edges.map(edge => <EdgeComponent key={edge.id} model={edge} />);
+  }
+
   selectNode(node) {
     this.store.deselectAllNodes();
     node.selected = true;
@@ -67,7 +74,21 @@ class App extends Component {
     });
   }
 
-  handleEdgeCreation(srcNode, targetPosition) {}
+  handleEdgeCreation(srcNode, targetPosition) {
+    const path = PathGenerator.newEdgePath(srcNode.position, targetPosition);
+    let edges = this.state.edges;
+    let creationEdge = edges.find(x => x.id === Config.edgeForCreationId);
+    if (!creationEdge) {
+      creationEdge = new BaseEdge(Config.edgeForCreationId, path);
+      edges.push(creationEdge);
+    } else {
+      creationEdge.pathDefinition = path;
+    }
+
+    this.setState({
+      edges
+    });
+  }
 
   render() {
     return (
@@ -79,6 +100,7 @@ class App extends Component {
           <Background width={this.svgWidth} height={this.svgHeight} />
 
           <Group>{this.renderNodes()}</Group>
+          <g>{this.renderEdges()}</g>
         </svg>
       </div>
     );

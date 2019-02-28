@@ -12,8 +12,8 @@ class AnchorPoint extends Component {
   }
 
   createNewEdge() {
-    let targetPosition = currentMousePosition();
-    this.props.handleEdgeCreation(targetPosition);
+    let { x, y } = d3Selection.event;
+    this.props.handleEdgeCreation({ x, y });
   }
 
   render() {

@@ -17,6 +17,10 @@ class Node {
   get id() {
     return this.data.id;
   }
+
+  get position() {
+    return { x: this.x, y: this.y };
+  }
 }
 
 export { Node };

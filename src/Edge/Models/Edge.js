@@ -1,14 +1,15 @@
 // eslint-disable-next-line no-unused-vars
 import { EdgeData } from "./EdgeData";
+import { BaseEdge } from "./BaseEdge";
 
-class Edge {
+class Edge extends BaseEdge {
   /**
    * @param {EdgeData} data
    * @param {string} pathDefinition
    */
-  constructor(data, pathDefinition) {
+  constructor(id, data, pathDefinition) {
+    super(id, pathDefinition);
     this.data = data;
-    this.pathDefinition = pathDefinition;
   }
 
   get srcNodeId() {

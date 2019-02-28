@@ -1,6 +1,7 @@
 const config = {
   nodeRadius: 50,
-  edgeColor: "red"
+  edgeColor: "red",
+  edgeForCreationId: "creation-edge"
 };
 
 Object.freeze(config);

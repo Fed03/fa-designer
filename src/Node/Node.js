@@ -71,7 +71,7 @@ class Node extends Component {
           key={i}
           node={model}
           handleEdgeCreation={this.handleEdgeCreation.bind(this)}
-          display={this.state.showAnchorPoints ? "inline" : "none"}
+          //display={this.state.showAnchorPoints ? "inline" : "none"}
           cx={x}
           cy={y}
           r={this.anchorPointRadius}
