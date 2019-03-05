@@ -14,6 +14,16 @@ class App extends Component {
   svgHeight = 1000;
   svgWidth = 1200;
   svgRef = React.createRef();
+  positionConstraints = {
+    x: {
+      min: config.nodeRadius,
+      max: this.svgWidth - config.nodeRadius
+    },
+    y: {
+      min: config.nodeRadius,
+      max: this.svgHeight - config.nodeRadius
+    }
+  };
 
   constructor(props) {
     super(props);
@@ -55,7 +65,7 @@ class App extends Component {
   }
 
   handleNodeTranslate = (node, newPosition) => {
-    this.store.translateNode(node, newPosition);
+    this.store.translateNode(node, this._calcConstrainedPosition(newPosition));
   };
 
   handleNodeMouseEnter = node => {
@@ -117,6 +127,24 @@ class App extends Component {
         </svg>
       </div>
     );
+  }
+
+  _calcConstrainedPosition(position) {
+    const newPairs = Object.entries(position).map(([k, v]) => {
+      let value = v;
+      value =
+        value < this.positionConstraints[k].min
+          ? this.positionConstraints[k].min
+          : value;
+      value =
+        value > this.positionConstraints[k].max
+          ? this.positionConstraints[k].max
+          : value;
+
+      return { [k]: value };
+    });
+
+    return Object.assign({}, ...newPairs);
   }
 }
 
