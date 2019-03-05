@@ -1,13 +1,22 @@
 import React, { Component } from "react";
 import AnchorPoint from "./AnchorPoint";
 import KeyHandler, { KEYDOWN } from "react-key-handler";
+import { select as d3Select, event as d3Event } from "d3-selection";
+import { drag as d3Drag } from "d3-drag";
 
 class Node extends Component {
+  nodeCircleRef = React.createRef();
+
   constructor(props) {
     super(props);
     this.state = {
       showAnchorPoints: false
     };
+  }
+
+  componentDidMount() {
+    const drag = d3Drag().on("drag", this.moveNode);
+    d3Select(this.nodeCircleRef.current).call(drag);
   }
 
   handleEdgeCreation = targetPosition => {
@@ -45,6 +54,11 @@ class Node extends Component {
     }
   }
 
+  moveNode = () => {
+    const { x, y } = d3Event;
+    this.props.onNodeMove(this.props.model, { x, y });
+  };
+
   render() {
     const { model: node, nodeRadius } = this.props;
     return (
@@ -55,6 +69,7 @@ class Node extends Component {
           onKeyHandle={this.handleKeyboard.bind(this)}
         />
         <circle
+          ref={this.nodeCircleRef}
           className="node"
           cx={node.x}
           cy={node.y}

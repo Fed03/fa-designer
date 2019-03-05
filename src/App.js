@@ -49,9 +49,14 @@ class App extends Component {
         onNodeDeletion={this.deleteNode.bind(this)}
         onMouseEnter={this.handleNodeMouseEnter}
         onMouseLeave={this.handleNodeMouseLeave}
+        onNodeMove={this.handleNodeTranslate}
       />
     ));
   }
+
+  handleNodeTranslate = (node, newPosition) => {
+    this.store.translateNode(node, newPosition);
+  };
 
   handleNodeMouseEnter = node => {
     this.setState({ candidateTrgNode: node });

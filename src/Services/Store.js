@@ -98,6 +98,29 @@ class Store {
     this._setState();
   }
 
+  translateNode(node, newPosition) {
+    if (newPosition) {
+      node.position = newPosition;
+      this.state.edges
+        .filter(e => node.isPartOfEdge(e))
+        .forEach(e => this._updateEdgePosition(e));
+
+      this._setState();
+    }
+  }
+
+  _updateEdgePosition(edge) {
+    const srcPosition = this._getNodeById(edge.srcNodeId).position;
+    const trgPosition = this._getNodeById(edge.trgNodeId).position;
+    const newPath = PathGenerator.edgePath(srcPosition, trgPosition);
+
+    edge.pathDefinition = newPath;
+  }
+
+  _getNodeById(id) {
+    return this.state.nodes.find(n => n.id === id);
+  }
+
   _setState() {
     this._component.setState({ ...this._component.state, ...this.state });
   }

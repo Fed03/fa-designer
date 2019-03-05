@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as d3Selection from "d3-selection";
+import { select as d3Select, event as d3Event } from "d3-selection";
 import { drag as d3Drag } from "d3-drag";
 
 class AnchorPoint extends Component {
@@ -10,7 +10,7 @@ class AnchorPoint extends Component {
       .on("start", this.startEdgeCreation)
       .on("drag", this.createNewEdge)
       .on("end", () => this.props.onEdgeCreationEnd());
-    d3Selection.select(this.elementRef.current).call(drag);
+    d3Select(this.elementRef.current).call(drag);
   }
 
   startEdgeCreation = () => {
@@ -35,7 +35,7 @@ class AnchorPoint extends Component {
   }
 
   static currentPosition() {
-    const { x, y } = d3Selection.event;
+    const { x, y } = d3Event;
     return { x, y };
   }
 }

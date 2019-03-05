@@ -23,6 +23,11 @@ class Node {
     return { x: this.x, y: this.y };
   }
 
+  set position({ x, y }) {
+    this.x = x;
+    this.y = y;
+  }
+
   /**
    * @param {Edge} edge
    */

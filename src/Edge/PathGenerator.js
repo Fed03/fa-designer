@@ -28,7 +28,12 @@ const PathGenerator = {
       trgPosition.y
     );
 
-    return Intersection.intersect(trgShape, chord).points[0];
+    let intersection = Intersection.intersect(trgShape, chord);
+    if (intersection.status === "Intersection") {
+      return intersection.points[0];
+    }
+
+    return trgPosition;
   },
 
   get _markerAwareRadius() {
