@@ -6,6 +6,7 @@ import { drag as d3Drag } from "d3-drag";
 
 class Node extends Component {
   nodeCircleRef = React.createRef();
+  containerRef = React.createRef();
 
   constructor(props) {
     super(props);
@@ -42,9 +43,19 @@ class Node extends Component {
   };
 
   handleClick() {
+    this._selectNode();
+  }
+
+  _selectNode() {
     if (!this.props.model.selected) {
       this.props.onNodeSelection(this.props.model);
+      this._moveToForeGround();
     }
+  }
+
+  _moveToForeGround() {
+    const containerEl = this.containerRef.current;
+    containerEl.parentNode.appendChild(containerEl);
   }
 
   handleKeyboard(evt) {
@@ -56,13 +67,14 @@ class Node extends Component {
 
   moveNode = () => {
     const { x, y } = d3Event;
+    this._selectNode();
     this.props.onNodeMove(this.props.model, { x, y });
   };
 
   render() {
     const { model: node, nodeRadius } = this.props;
     return (
-      <g id={node.id} className="node-group">
+      <g id={node.id} className="node-group" ref={this.containerRef}>
         <KeyHandler
           keyEventName={KEYDOWN}
           keyValue="Delete"
