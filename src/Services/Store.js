@@ -91,11 +91,13 @@ class Store {
   }
 
   createNodesLink(srcNode, trgNode) {
-    const path = PathGenerator.edgePath(srcNode.position, trgNode.position);
-    const data = new EModels.EdgeData(srcNode.id, trgNode.id);
-    this.state.edges.push(new EModels.Edge(uuid(), data, path));
+    if (!this._existsAnEdgeBetween(srcNode, trgNode)) {
+      const path = PathGenerator.edgePath(srcNode.position, trgNode.position);
+      const data = new EModels.EdgeData(srcNode.id, trgNode.id);
+      this.state.edges.push(new EModels.Edge(uuid(), data, path));
 
-    this._setState();
+      this._setState();
+    }
   }
 
   translateNode(node, newPosition) {
@@ -123,6 +125,12 @@ class Store {
 
   _setState() {
     this._component.setState({ ...this._component.state, ...this.state });
+  }
+
+  _existsAnEdgeBetween(srcNode, trgNode) {
+    return !!this.state.edges.find(
+      edge => edge.srcNodeId === srcNode.id && edge.trgNodeId === trgNode.id
+    );
   }
 }
 
