@@ -9,6 +9,7 @@ class Edge extends Component {
         stroke={config.edge.stroke}
         strokeWidth={config.edge.strokeWidth}
         markerEnd={this.markerRef}
+        fill="transparent"
       />
     );
   }
