@@ -7,6 +7,8 @@ import { drag as d3Drag } from "d3-drag";
 class Node extends Component {
   nodeCircleRef = React.createRef();
   containerRef = React.createRef();
+  deltaX = 0;
+  deltaY = 0;
 
   constructor(props) {
     super(props);
@@ -16,7 +18,14 @@ class Node extends Component {
   }
 
   componentDidMount() {
-    const drag = d3Drag().on("drag", this.moveNode);
+    const drag = d3Drag()
+      .on("start", () => {
+        const { x, y } = d3Event;
+        const currentPos = this.props.model.position;
+        this.deltaX = currentPos.x - x;
+        this.deltaY = currentPos.y - y;
+      })
+      .on("drag", this.moveNode);
     d3Select(this.nodeCircleRef.current).call(drag);
   }
 
@@ -68,7 +77,10 @@ class Node extends Component {
   moveNode = () => {
     const { x, y } = d3Event;
     this._selectNode();
-    this.props.onNodeMove(this.props.model, { x, y });
+    this.props.onNodeMove(this.props.model, {
+      x: x + this.deltaX,
+      y: y + this.deltaY
+    });
   };
 
   render() {
