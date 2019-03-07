@@ -82,7 +82,11 @@ const PathGenerator = {
     return nodeRadius + (strokeWidth * markerSize) / 2;
   },
 
-  creationEdgePath(srcPosition, trgPosition) {
+  creationEdgePath(srcCenterPosition, trgCenterPosition) {
+    const { srcPosition, trgPosition } = this._calcInitialPoints(
+      srcCenterPosition,
+      trgCenterPosition
+    );
     return this._pathFactory(
       this._generateInterpolationPoints(
         this._calculateLineOriginPoint(srcPosition, trgPosition),
@@ -91,13 +95,42 @@ const PathGenerator = {
     );
   },
 
-  edgePath(srcPosition, trgPosition) {
+  edgePath(srcCenterPosition, trgCenterPosition) {
+    const { srcPosition, trgPosition } = this._calcInitialPoints(
+      srcCenterPosition,
+      trgCenterPosition
+    );
     return this._pathFactory(
       this._generateInterpolationPoints(
         this._calculateLineOriginPoint(srcPosition, trgPosition),
         this._calculateLineEndPoint(srcPosition, trgPosition)
       )
     );
+  },
+
+  _calcInitialPoints(srcCenterPosition, trgCenterPosition) {
+    const srcCenterPoint = new Point2D(
+      srcCenterPosition.x,
+      srcCenterPosition.y
+    );
+    const trgCenterPoint = new Point2D(
+      trgCenterPosition.x,
+      trgCenterPosition.y
+    );
+    const linkVector = Vector2D.fromPoints(srcCenterPoint, trgCenterPoint);
+
+    const srcPosition = this._perpTranslate(
+      linkVector,
+      srcCenterPoint,
+      config.nodeRadius * -0.7
+    );
+    const trgPosition = this._perpTranslate(
+      linkVector,
+      trgCenterPoint,
+      config.nodeRadius * -0.7
+    );
+
+    return { srcPosition, trgPosition };
   }
 };
 
