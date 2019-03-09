@@ -7,7 +7,7 @@ class DropShadowFilter extends Component {
       <filter id={id} height="160%">
         <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
         <feOffset dx="3" dy="5" result="offsetblur" />
-        <feFlood flood-opacity="0.45" />
+        <feFlood floodOpacity="0.45" />
         <feComposite in2="offsetblur" operator="in" />
         <feMerge>
           <feMergeNode />

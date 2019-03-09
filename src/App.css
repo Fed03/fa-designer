@@ -13,6 +13,10 @@
   fill: #ff9900;
 }
 
+.edge-group,
+.node-group {
+  cursor: pointer;
+}
 .node-group text {
   fill: white;
 }

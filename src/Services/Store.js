@@ -2,10 +2,13 @@
 import { NodeData } from "../Node/Models/NodeData";
 import { Node } from "../Node/Models/Node";
 import * as EModels from "../Edge/Models";
-import { PathGenerator } from "../Edge/PathGenerator";
+import {
+  EdgePathGenerator,
+  CreationEdgePathGenerator
+} from "../Utils/PathGenerator";
 import uuid from "uuid/v1";
 import config from "../Config";
-import { SelectionBox } from "./SelectionBox";
+import { SelectionBox } from "../Utils/SelectionBox";
 
 class Store {
   state = {
@@ -67,7 +70,8 @@ class Store {
   }
 
   addCreationEdge(srcPosition, targetPosition) {
-    const path = PathGenerator.creationEdgePath(srcPosition, targetPosition);
+    const path = new CreationEdgePathGenerator(srcPosition, targetPosition)
+      .path;
 
     this.state.edges.push(new EModels.BaseEdge(config.edge.creationId, path));
     this._setState();
@@ -81,7 +85,8 @@ class Store {
       return;
     }
 
-    const path = PathGenerator.creationEdgePath(srcPosition, targetPosition);
+    const path = new CreationEdgePathGenerator(srcPosition, targetPosition)
+      .path;
     creationEdge.pathDefinition = path;
 
     this._setState();
@@ -97,7 +102,8 @@ class Store {
 
   createNodesLink(srcNode, trgNode) {
     if (!this._existsAnEdgeBetween(srcNode, trgNode)) {
-      const path = PathGenerator.edgePath(srcNode.position, trgNode.position);
+      const path = new EdgePathGenerator(srcNode.position, trgNode.position)
+        .path;
       const data = new EModels.EdgeData(srcNode.id, trgNode.id);
       this.state.edges.push(new EModels.Edge(uuid(), data, path));
 
@@ -171,7 +177,7 @@ class Store {
   _updateEdgePosition(edge) {
     const srcPosition = this._getNodeById(edge.srcNodeId).position;
     const trgPosition = this._getNodeById(edge.trgNodeId).position;
-    const newPath = PathGenerator.edgePath(srcPosition, trgPosition);
+    const newPath = new EdgePathGenerator(srcPosition, trgPosition).path;
 
     edge.pathDefinition = newPath;
   }
