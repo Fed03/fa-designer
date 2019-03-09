@@ -4,7 +4,7 @@ class DropShadowFilter extends Component {
   render() {
     const { id } = this.props;
     return (
-      <filter id={id} height="160%">
+      <filter id={id} height="200%" width="200%">
         <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
         <feOffset dx="3" dy="5" result="offsetblur" />
         <feFlood floodOpacity="0.45" />

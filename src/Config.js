@@ -4,7 +4,7 @@ const config = {
     strokeWidth: 5,
     creationId: "creation-edge"
   },
-  markerSize: 5,
+  markerSize: 4,
   dropShadowId: "drop-shadow-filter"
 };
 

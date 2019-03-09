@@ -91,8 +91,8 @@ class EdgePathGenerator {
 
   _calculateLineEndPoint(srcPoint, trgPoint) {
     const trgShape = Shapes.circle(
-      trgPoint.x,
-      trgPoint.y,
+      this._trgCenterPoint.x,
+      this._trgCenterPoint.y,
       EdgePathGenerator._markerAwareRadius
     );
     return EdgePathGenerator._calculateIntersectionPoint(
