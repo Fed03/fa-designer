@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 // import jsonn from "./dummydata.json";
 import { Store } from "./Services/Store";
-import { Background } from "./Background";
-import { ArrowHead } from "./ArrowHead";
+import { Background, ArrowHead, DropShadowFilter } from "./Defs";
 import {
   select as d3Select,
   event as d3Event,
@@ -61,6 +60,7 @@ class App extends Component {
         key={node.id}
         model={node}
         nodeRadius={config.nodeRadius}
+        dropShadowId={config.dropShadowId}
         onEdgeCreationStart={this.handleStartOfEdgeCreation}
         onEdgeCreation={this.handleEdgeCreation}
         onEdgeCreationEnd={this.handleEndOfEdgeCreation}
@@ -92,6 +92,7 @@ class App extends Component {
         key={edge.id}
         model={edge}
         config={config}
+        dropShadowId={config.dropShadowId}
         onClick={edge => this.store.selectEdge(edge)}
         onDeleteKey={edge => this.store.removeEdge(edge)}
       />
@@ -135,6 +136,7 @@ class App extends Component {
               markerSize={config.markerSize}
               id="selected-edge-arrow"
             />
+            <DropShadowFilter id={config.dropShadowId} />
           </defs>
           <Background width={this.svgWidth} height={this.svgHeight} />
 

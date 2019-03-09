@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Group } from "@vx/group";
 import { PatternCircles } from "@vx/pattern";
 
 class Background extends Component {
   render() {
     return (
-      <Group>
+      <g>
         <PatternCircles id="circles" height={30} width={30} fill="#bbb" />
         <rect
           x="0"
@@ -14,7 +13,7 @@ class Background extends Component {
           height={this.props.height}
           fill="url('#circles')"
         />
-      </Group>
+      </g>
     );
   }
 }

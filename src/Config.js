@@ -4,7 +4,8 @@ const config = {
     strokeWidth: 5,
     creationId: "creation-edge"
   },
-  markerSize: 5
+  markerSize: 5,
+  dropShadowId: "drop-shadow-filter"
 };
 
 Object.freeze(config);

@@ -911,14 +911,6 @@
   resolved "https://registry.yarnpkg.com/@types/tapable/-/tapable-1.0.2.tgz#e13182e1b69871a422d7863e11a4a6f5b814a4bd"
   integrity sha512-42zEJkBpNfMEAvWR5WlwtTH22oDzcMjFsL9gDGExwF8X8WvAiw7Vwop7hPw03QT8TKfec83LwbHj6SvpqM4ELQ==
 
-"@vx/group@^0.0.183":
-  version "0.0.183"
-  resolved "https://registry.yarnpkg.com/@vx/group/-/group-0.0.183.tgz#15c8b14c5cadbe5f76c3ddcab8c5698cae24b443"
-  integrity sha512-iD2tDL8sl6HjZsMn+kkBjRb29px7qlHF8o6MQ3VbzVjUp+WZEYvA/s1bkqvn3q9tPtFAMBG+YWp9oSnkMdfpYQ==
-  dependencies:
-    classnames "^2.2.5"
-    prop-types "^15.6.2"
-
 "@vx/pattern@^0.0.183":
   version "0.0.183"
   resolved "https://registry.yarnpkg.com/@vx/pattern/-/pattern-0.0.183.tgz#0e1781a0b071a7a5109ad33ad99744013d842cb8"

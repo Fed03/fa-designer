@@ -85,7 +85,7 @@ class Node extends Component {
   };
 
   render() {
-    const { model: node, nodeRadius } = this.props;
+    const { model: node, nodeRadius, dropShadowId } = this.props;
     return (
       <g
         id={node.id}
@@ -114,6 +114,7 @@ class Node extends Component {
           cy={node.y}
           r={nodeRadius}
           onClick={this.handleClick.bind(this)}
+          filter={`url(#${dropShadowId})`}
           // onDoubleClick={this.}
         />
 

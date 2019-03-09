@@ -25,9 +25,18 @@ class Edge extends Component {
           strokeWidth={config.edge.strokeWidth}
           fill="none"
           className={classnames("edge", { "edge-selected": model.selected })}
+          filter={this.filter}
         />
       </g>
     );
+  }
+
+  get filter() {
+    const { model, dropShadowId } = this.props;
+    if (model.selected) {
+      return `url(#${dropShadowId})`;
+    }
+    return "none";
   }
 
   selectEdge = () => {

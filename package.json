@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@vx/group": "^0.0.183",
     "@vx/pattern": "^0.0.183",
     "classnames": "^2.2.6",
     "d3-drag": "^1.2.3",
