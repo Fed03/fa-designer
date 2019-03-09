@@ -60,6 +60,7 @@ class Store {
 
   selectSingleNode(node) {
     this.deselectAllNodes();
+    this._deselectAllEdges();
     node.selected = true;
 
     this._setState();
@@ -139,6 +140,7 @@ class Store {
   }
 
   endBoxSelection() {
+    this._deselectAllEdges();
     this.deselectAllNodes();
 
     this.state.nodes.forEach(node => {

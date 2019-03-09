@@ -77,7 +77,7 @@ const PathGenerator = {
     const {
       nodeRadius,
       edge: { strokeWidth },
-      marker: { markerSize }
+      markerSize
     } = config;
     return nodeRadius + (strokeWidth * markerSize) / 2;
   },

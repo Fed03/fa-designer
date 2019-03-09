@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import KeyHandler, { KEYDOWN } from "react-key-handler";
+import classnames from "classnames";
 
 class Edge extends Component {
-  static classes = ["edge"];
   render() {
     const { model, config } = this.props;
     return (
-      <g className="edge-group">
+      <g className="edge-group" onClick={this.selectEdge}>
         <KeyHandler
           keyEventName={KEYDOWN}
           keyValue="Delete"
@@ -14,28 +14,20 @@ class Edge extends Component {
         />
         <path
           d={model.pathDefinition}
-          stroke={config.edge.stroke}
-          strokeWidth={config.edge.strokeWidth}
-          markerEnd={this.markerRef}
           fill="none"
-          onClick={this.selectEdge}
-          className={this.className}
+          stroke="transparent"
+          strokeWidth={config.edge.strokeWidth * 5.5}
+          className="edge-mouse-handler"
+        />
+
+        <path
+          d={model.pathDefinition}
+          strokeWidth={config.edge.strokeWidth}
+          fill="none"
+          className={classnames("edge", { "edge-selected": model.selected })}
         />
       </g>
     );
-  }
-
-  get className() {
-    let classes = [...Edge.classes];
-    if (this.props.model.selected) {
-      classes.push("edge-selected");
-    }
-    return classes.join(" ");
-  }
-
-  get markerRef() {
-    const markerId = this.props.config.marker.elementId;
-    return `url(#${markerId})`;
   }
 
   selectEdge = () => {
@@ -43,7 +35,10 @@ class Edge extends Component {
   };
 
   handleKeyboard = () => {
-    this.props.onDeleteKey(this.props.model);
+    const { model } = this.props;
+    if (model.selected) {
+      this.props.onDeleteKey(this.props.model);
+    }
   };
 }
 

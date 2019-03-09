@@ -130,10 +130,10 @@ class App extends Component {
       <div>
         <svg ref={this.svgRef} width={this.svgWidth} height={this.svgHeight}>
           <defs>
+            <ArrowHead markerSize={config.markerSize} id="edge-arrow" />
             <ArrowHead
-              markerSize={config.marker.markerSize}
-              id={config.marker.elementId}
-              markerColor={config.edge.stroke}
+              markerSize={config.markerSize}
+              id="selected-edge-arrow"
             />
           </defs>
           <Background width={this.svgWidth} height={this.svgHeight} />

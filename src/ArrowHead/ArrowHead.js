@@ -25,7 +25,7 @@ class ArrowHead extends Component {
         markerWidth={this.props.markerSize}
         markerHeight={this.props.markerSize}
       >
-        <path d={this.pathDefinition} fill={this.props.markerColor} />
+        <path d={this.pathDefinition} />
       </marker>
     );
   }

@@ -1,3 +1,32 @@
+.edge {
+  stroke: #4db6ac;
+  marker-end: url(#edge-arrow);
+}
 .edge.edge-selected {
-  stroke: black;
+  stroke: #ff9900;
+  marker-end: url(#selected-edge-arrow);
+}
+#edge-arrow {
+  fill: #4db6ac;
+}
+#selected-edge-arrow {
+  fill: #ff9900;
+}
+
+.node-group text {
+  fill: white;
+}
+
+.node-group .node {
+  fill: #90caf9;
+  stroke: #1565c0;
+  stroke-width: 2;
+}
+.node-group.node-selected .node {
+  fill: #1e88e5;
+}
+.node-group .anchor-point {
+  stroke: #1565c0;
+  stroke-width: 2;
+  fill: #e3f2fd;
 }

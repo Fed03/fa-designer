@@ -3,6 +3,7 @@ import AnchorPoint from "./AnchorPoint";
 import KeyHandler, { KEYDOWN } from "react-key-handler";
 import { select as d3Select, event as d3Event } from "d3-selection";
 import { drag as d3Drag } from "d3-drag";
+import classnames from "classnames";
 
 class Node extends Component {
   nodeCircleRef = React.createRef();
@@ -86,23 +87,39 @@ class Node extends Component {
   render() {
     const { model: node, nodeRadius } = this.props;
     return (
-      <g id={node.id} className="node-group" ref={this.containerRef}>
+      <g
+        id={node.id}
+        className={classnames("node-group", { "node-selected": node.selected })}
+        ref={this.containerRef}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
+      >
         <KeyHandler
           keyEventName={KEYDOWN}
           keyValue="Delete"
           onKeyHandle={this.handleKeyboard.bind(this)}
         />
         <circle
+          cx={node.x}
+          cy={node.y}
+          r={nodeRadius * 1.5}
+          fill="transparent"
+          className="node-contour"
+        />
+
+        <circle
           ref={this.nodeCircleRef}
           className="node"
           cx={node.x}
           cy={node.y}
           r={nodeRadius}
-          fill={node.selected ? "blue" : "red"}
-          onMouseEnter={this.handleMouseEnter}
-          onMouseLeave={this.handleMouseLeave}
           onClick={this.handleClick.bind(this)}
+          // onDoubleClick={this.}
         />
+
+        {/* <text x={node.x} y={node.y} textAnchor="middle">
+          {node.label}
+        </text> */}
         {this.renderAnchorPoints()}
       </g>
     );
@@ -118,11 +135,10 @@ class Node extends Component {
           onEdgeCreationStart={this.handleStartOfEdgeCreation}
           onEdgeCreation={this.handleEdgeCreation}
           onEdgeCreationEnd={this.props.onEdgeCreationEnd}
-          //display={this.state.showAnchorPoints ? "inline" : "none"}
+          display={this.state.showAnchorPoints ? "inline" : "none"}
           cx={x}
           cy={y}
           r={this.anchorPointRadius}
-          fill="green"
         />
       );
     });
@@ -146,7 +162,7 @@ class Node extends Component {
   }
 
   get anchorPointRadius() {
-    return this.props.nodeRadius / 10;
+    return this.props.nodeRadius * 0.14;
   }
 }
 
