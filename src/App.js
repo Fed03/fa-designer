@@ -88,7 +88,13 @@ class App extends Component {
   renderEdges() {
     const { edges } = this.state;
     return edges.map(edge => (
-      <Edge key={edge.id} model={edge} config={config} />
+      <Edge
+        key={edge.id}
+        model={edge}
+        config={config}
+        onClick={edge => this.store.selectEdge(edge)}
+        onDeleteKey={edge => this.store.removeEdge(edge)}
+      />
     ));
   }
 

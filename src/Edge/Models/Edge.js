@@ -10,6 +10,7 @@ class Edge extends BaseEdge {
   constructor(id, data, pathDefinition) {
     super(id, pathDefinition);
     this.data = data;
+    this.selected = false;
   }
 
   get srcNodeId() {

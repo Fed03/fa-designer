@@ -153,6 +153,19 @@ class Store {
     this._setState();
   }
 
+  selectEdge(edge) {
+    this._deselectAllEdges();
+    edge.selected = true;
+    this._setState();
+  }
+
+  removeEdge(edge) {
+    const newEdges = this.state.edges.filter(e => e.id !== edge.id);
+    this.state.edges = newEdges;
+
+    this._setState();
+  }
+
   _updateEdgePosition(edge) {
     const srcPosition = this._getNodeById(edge.srcNodeId).position;
     const trgPosition = this._getNodeById(edge.trgNodeId).position;
@@ -173,6 +186,10 @@ class Store {
     return !!this.state.edges.find(
       edge => edge.srcNodeId === srcNode.id && edge.trgNodeId === trgNode.id
     );
+  }
+
+  _deselectAllEdges() {
+    this.state.edges.forEach(e => (e.selected = false));
   }
 }
 
