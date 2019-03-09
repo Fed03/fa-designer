@@ -4,11 +4,15 @@ import "./App.css";
 import { Store } from "./Services/Store";
 import { Background } from "./Background";
 import { ArrowHead } from "./ArrowHead";
-import * as d3Selection from "d3-selection";
-import { Group } from "@vx/group";
+import {
+  select as d3Select,
+  event as d3Event,
+  mouse as d3Mouse
+} from "d3-selection";
 import { Node } from "./Node";
 import config from "./Config";
 import { Edge } from "./Edge";
+import { drag as d3Drag } from "d3-drag";
 
 class App extends Component {
   svgHeight = 1000;
@@ -34,15 +38,20 @@ class App extends Component {
   }
 
   componentDidMount() {
-    d3Selection
-      .select(this.svgRef.current)
-      .on("dblclick", () => this.addNewNode());
+    const drag = d3Drag()
+      .on("start", () => this.store.startBoxSelection(d3Event.x, d3Event.y))
+      .on("drag", () => this.store.resizeBoxSelection(d3Event.x, d3Event.y))
+      .on("end", () => this.store.endBoxSelection());
+
+    d3Select(this.svgRef.current)
+      .on("dblclick", () => this.addNewNode())
+      .call(drag);
   }
 
   addNewNode() {
-    const position = d3Selection.mouse(d3Selection.event.currentTarget);
+    const position = d3Mouse(d3Event.currentTarget);
     const node = this.store.createNode(position);
-    this.store.selectNode(node);
+    this.store.selectSingleNode(node);
   }
 
   renderNodes() {
@@ -84,7 +93,7 @@ class App extends Component {
   }
 
   selectNode(node) {
-    this.store.selectNode(node);
+    this.store.selectSingleNode(node);
   }
 
   deleteNode(node) {
@@ -110,6 +119,7 @@ class App extends Component {
   };
 
   render() {
+    const { selectionBox } = this.state;
     return (
       <div>
         <svg ref={this.svgRef} width={this.svgWidth} height={this.svgHeight}>
@@ -123,7 +133,19 @@ class App extends Component {
           <Background width={this.svgWidth} height={this.svgHeight} />
 
           <g>{this.renderEdges()}</g>
-          <Group>{this.renderNodes()}</Group>
+          <g>{this.renderNodes()}</g>
+
+          {selectionBox.visible && (
+            <rect
+              x={selectionBox.x}
+              y={selectionBox.y}
+              height={selectionBox.height}
+              width={selectionBox.width}
+              fill="#b2daf7"
+              fillOpacity="0.6"
+              stroke="#0094ff"
+            />
+          )}
         </svg>
       </div>
     );

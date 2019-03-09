@@ -5,11 +5,15 @@ import * as EModels from "../Edge/Models";
 import { PathGenerator } from "../Edge/PathGenerator";
 import uuid from "uuid/v1";
 import config from "../Config";
+import { SelectionBox } from "./SelectionBox";
 
 class Store {
   state = {
     nodes: [],
-    edges: []
+    edges: [],
+    selectionBox: {
+      visible: false
+    }
   };
 
   constructor(component, initialState = {}) {
@@ -54,7 +58,7 @@ class Store {
     this._setState();
   }
 
-  selectNode(node) {
+  selectSingleNode(node) {
     this.deselectAllNodes();
     node.selected = true;
 
@@ -109,6 +113,44 @@ class Store {
 
       this._setState();
     }
+  }
+
+  startBoxSelection(mouseX, mouseY) {
+    const { selectionBox } = this.state;
+    this._selectionBox = new SelectionBox(mouseX, mouseY);
+
+    selectionBox.visible = true;
+    this.state.selectionBox = {
+      ...selectionBox,
+      ...this._selectionBox.currentState
+    };
+
+    this._setState();
+  }
+
+  resizeBoxSelection(mouseX, mouseY) {
+    const { selectionBox } = this.state;
+    this.state.selectionBox = {
+      ...selectionBox,
+      ...this._selectionBox.resize(mouseX, mouseY)
+    };
+
+    this._setState();
+  }
+
+  endBoxSelection() {
+    this.deselectAllNodes();
+
+    this.state.nodes.forEach(node => {
+      if (this._selectionBox.containsNode(node)) {
+        node.selected = true;
+      }
+    });
+
+    this.state.selectionBox = {
+      visible: false
+    };
+    this._setState();
   }
 
   _updateEdgePosition(edge) {
