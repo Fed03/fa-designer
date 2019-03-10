@@ -43,9 +43,16 @@ class App extends Component {
       .on("end", () => this.store.endBoxSelection());
 
     d3Select(this.svgRef.current)
-      .on("dblclick", () => this.addNewNode())
+      .on("dblclick", this.handleDblClick)
       .call(drag);
   }
+
+  handleDblClick = () => {
+    const { srcElement } = d3Event;
+    if (!srcElement.classList.contains("node")) {
+      this.addNewNode();
+    }
+  };
 
   addNewNode() {
     const position = d3Mouse(d3Event.currentTarget);
@@ -69,6 +76,9 @@ class App extends Component {
         onMouseEnter={this.handleNodeMouseEnter}
         onMouseLeave={this.handleNodeMouseLeave}
         onNodeMove={this.handleNodeTranslate}
+        onChangeLabel={(node, newLabel) =>
+          this.store.updateLabel(node, newLabel)
+        }
       />
     ));
   }

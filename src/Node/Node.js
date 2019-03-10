@@ -4,6 +4,7 @@ import KeyHandler, { KEYDOWN } from "react-key-handler";
 import { select as d3Select, event as d3Event } from "d3-selection";
 import { drag as d3Drag } from "d3-drag";
 import classnames from "classnames";
+import { EditableLabel } from "../EditableLabel";
 
 class Node extends Component {
   nodeCircleRef = React.createRef();
@@ -14,7 +15,8 @@ class Node extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showAnchorPoints: false
+      showAnchorPoints: false,
+      isEditing: false
     };
   }
 
@@ -84,12 +86,23 @@ class Node extends Component {
     });
   };
 
+  startEditing = () => {
+    this.setState({ isEditing: true });
+  };
+
+  finishEditing = newLabel => {
+    this.setState({ isEditing: false });
+    this.props.onChangeLabel(this.props.model, newLabel);
+  };
+
   render() {
     const { model: node, nodeRadius, dropShadowId } = this.props;
     return (
       <g
         id={node.id}
-        className={classnames("node-group", { "node-selected": node.selected })}
+        className={classnames("node-group", {
+          "node-selected": node.selected
+        })}
         ref={this.containerRef}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
@@ -115,13 +128,18 @@ class Node extends Component {
           r={nodeRadius}
           onClick={this.handleClick.bind(this)}
           filter={`url(#${dropShadowId})`}
-          // onDoubleClick={this.}
+          onDoubleClick={this.startEditing}
         />
 
-        {/* <text x={node.x} y={node.y} textAnchor="middle">
-          {node.label}
-        </text> */}
         {this.renderAnchorPoints()}
+
+        <EditableLabel
+          x={node.x}
+          y={node.y}
+          label={node.data.label}
+          isEditing={this.state.isEditing}
+          onChange={this.finishEditing}
+        />
       </g>
     );
   }

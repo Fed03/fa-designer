@@ -174,6 +174,11 @@ class Store {
     this._setState();
   }
 
+  updateLabel(node, label) {
+    node.updateLabel(label);
+    this._setState();
+  }
+
   _updateEdgePosition(edge) {
     const srcPosition = this._getNodeById(edge.srcNodeId).position;
     const trgPosition = this._getNodeById(edge.trgNodeId).position;

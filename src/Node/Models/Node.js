@@ -28,6 +28,10 @@ class Node {
     this.y = y;
   }
 
+  updateLabel(label) {
+    this.data.label = label;
+  }
+
   /**
    * @param {Edge} edge
    */
