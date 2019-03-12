@@ -16,7 +16,7 @@ import { drag as d3Drag } from "d3-drag";
 class App extends Component {
   svgHeight = 1000;
   svgWidth = 1200;
-  svgRef = React.createRef();
+  convasRef = React.createRef();
   positionConstraints = {
     x: {
       min: config.nodeRadius,
@@ -42,17 +42,10 @@ class App extends Component {
       .on("drag", () => this.store.resizeBoxSelection(d3Event.x, d3Event.y))
       .on("end", () => this.store.endBoxSelection());
 
-    d3Select(this.svgRef.current)
-      .on("dblclick", this.handleDblClick)
+    d3Select(this.convasRef.current)
+      .on("dblclick", this.addNewNode.bind(this))
       .call(drag);
   }
-
-  handleDblClick = () => {
-    const { srcElement } = d3Event;
-    if (!srcElement.classList.contains("node")) {
-      this.addNewNode();
-    }
-  };
 
   addNewNode() {
     const position = d3Mouse(d3Event.currentTarget);
@@ -139,7 +132,7 @@ class App extends Component {
     const { selectionBox } = this.state;
     return (
       <div>
-        <svg ref={this.svgRef} width={this.svgWidth} height={this.svgHeight}>
+        <svg width={this.svgWidth} height={this.svgHeight}>
           <defs>
             <ArrowHead markerSize={config.markerSize} id="edge-arrow" />
             <ArrowHead
@@ -148,7 +141,10 @@ class App extends Component {
             />
             <DropShadowFilter id={config.dropShadowId} />
           </defs>
-          <Background width={this.svgWidth} height={this.svgHeight} />
+
+          <g ref={this.convasRef}>
+            <Background width={this.svgWidth} height={this.svgHeight} />
+          </g>
 
           <g>{this.renderEdges()}</g>
           <g>{this.renderNodes()}</g>
