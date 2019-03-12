@@ -18,6 +18,11 @@
   cursor: pointer;
 }
 .node-group text {
+  pointer-events: none;
+  user-select: none;
+}
+
+.node-group.node-selected text {
   fill: white;
 }
 
@@ -33,4 +38,8 @@
   stroke: #1565c0;
   stroke-width: 2;
   fill: #e3f2fd;
+}
+
+.label-input {
+  padding: 0 5px;
 }

@@ -41,6 +41,7 @@ class EditableLabel extends Component {
             onBlur={this.finishEditing}
             style={{ width: `${width}px`, height: `${height}px` }}
             onKeyPress={this.handleKeyPress}
+            className="label-input"
           />
         </foreignObject>
       );
@@ -51,7 +52,11 @@ class EditableLabel extends Component {
     this.props.onChange(this.state.value);
   };
 
-  handleKeyPress = e => {};
+  handleKeyPress = e => {
+    if (e.key === "Enter") {
+      this.finishEditing();
+    }
+  };
 }
 
 export { EditableLabel };

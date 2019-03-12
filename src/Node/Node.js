@@ -16,7 +16,7 @@ class Node extends Component {
     super(props);
     this.state = {
       showAnchorPoints: false,
-      isEditing: false
+      isEditing: !this.props.model.data.label
     };
   }
 
