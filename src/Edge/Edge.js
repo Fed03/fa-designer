@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import KeyHandler, { KEYDOWN } from "react-key-handler";
 import classnames from "classnames";
+import { EditableLabel } from "../EditableLabel";
+import BaseEdge from "./BaseEdge";
 
 class Edge extends Component {
   render() {
@@ -12,31 +14,23 @@ class Edge extends Component {
           keyValue="Delete"
           onKeyHandle={this.handleKeyboard}
         />
-        <path
-          d={model.pathDefinition}
-          fill="none"
-          stroke="transparent"
-          strokeWidth={config.edge.strokeWidth * 5.5}
-          className="edge-mouse-handler"
+        <BaseEdge
+          model={model}
+          config={config}
+          className={classnames({
+            "edge-selected": model.selected
+          })}
         />
 
-        <path
-          d={model.pathDefinition}
-          strokeWidth={config.edge.strokeWidth}
-          fill="none"
-          className={classnames("edge", { "edge-selected": model.selected })}
-          filter={this.filter}
-        />
+        {/* <EditableLabel
+          x={midPoint.x}
+          y={midPoint.y}
+          label={model.data.label}
+          isEditing={false}
+          onChange={this.finishEditing}
+        /> */}
       </g>
     );
-  }
-
-  get filter() {
-    const { model, dropShadowId } = this.props;
-    if (model.selected) {
-      return `url(#${dropShadowId})`;
-    }
-    return "none";
   }
 
   selectEdge = () => {

@@ -16,7 +16,8 @@ class Store {
     edges: [],
     selectionBox: {
       visible: false
-    }
+    },
+    creationEdge: null
   };
 
   constructor(component, initialState = {}) {
@@ -73,14 +74,15 @@ class Store {
     const path = new CreationEdgePathGenerator(srcPosition, targetPosition)
       .path;
 
-    this.state.edges.push(new EModels.BaseEdge(config.edge.creationId, path));
+    this.state.creationEdge = new EModels.BaseEdge(
+      config.edge.creationId,
+      path
+    );
     this._setState();
   }
 
   translateCreationEdge(srcPosition, targetPosition) {
-    const creationEdge = this.state.edges.find(
-      x => x.id === config.edge.creationId
-    );
+    const { creationEdge } = this.state;
     if (!creationEdge) {
       return;
     }
@@ -93,10 +95,7 @@ class Store {
   }
 
   removeCreationEdge() {
-    const edgesWithoutCreationOne = this.state.edges.filter(
-      edge => edge.id !== config.edge.creationId
-    );
-    this.state.edges = edgesWithoutCreationOne;
+    this.state.creationEdge = null;
     this._setState();
   }
 
@@ -163,6 +162,7 @@ class Store {
 
   selectEdge(edge) {
     this._deselectAllEdges();
+    this.deselectAllNodes();
     edge.selected = true;
     this._setState();
   }

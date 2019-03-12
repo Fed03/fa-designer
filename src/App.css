@@ -5,6 +5,7 @@
 .edge.edge-selected {
   stroke: #ff9900;
   marker-end: url(#selected-edge-arrow);
+  filter: url(#drop-shadow-filter);
 }
 #edge-arrow {
   fill: #4db6ac;

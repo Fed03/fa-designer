@@ -10,7 +10,7 @@ import {
 } from "d3-selection";
 import { Node } from "./Node";
 import config from "./Config";
-import { Edge } from "./Edge";
+import { Components } from "./Edge";
 import { drag as d3Drag } from "d3-drag";
 
 class App extends Component {
@@ -91,11 +91,10 @@ class App extends Component {
   renderEdges() {
     const { edges } = this.state;
     return edges.map(edge => (
-      <Edge
+      <Components.Edge
         key={edge.id}
         model={edge}
         config={config}
-        dropShadowId={config.dropShadowId}
         onClick={edge => this.store.selectEdge(edge)}
         onDeleteKey={edge => this.store.removeEdge(edge)}
       />
@@ -129,7 +128,7 @@ class App extends Component {
   };
 
   render() {
-    const { selectionBox } = this.state;
+    const { selectionBox, creationEdge } = this.state;
     return (
       <div>
         <svg width={this.svgWidth} height={this.svgHeight}>
@@ -146,7 +145,12 @@ class App extends Component {
             <Background width={this.svgWidth} height={this.svgHeight} />
           </g>
 
-          <g>{this.renderEdges()}</g>
+          <g>
+            {this.renderEdges()}
+            {creationEdge && (
+              <Components.BaseEdge config={config} model={creationEdge} />
+            )}
+          </g>
           <g>{this.renderNodes()}</g>
 
           {selectionBox.visible && (
