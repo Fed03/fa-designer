@@ -1,16 +1,32 @@
 import React, { Component } from "react";
-import { PatternCircles } from "@vx/pattern";
 
 class Background extends Component {
   render() {
+    const size = 40960;
+    const patternSize = 30;
+    const gridDotSize = 2;
     return (
       <g>
-        <PatternCircles id="circles" height={30} width={30} fill="#bbb" />
+        <defs>
+          <pattern
+            id="circles"
+            height={patternSize}
+            width={patternSize}
+            patternUnits="userSpaceOnUse"
+          >
+            <circle
+              cx={patternSize / 2}
+              cy={patternSize / 2}
+              r={gridDotSize}
+              fill="#bbb"
+            />
+          </pattern>
+        </defs>
         <rect
-          x="0"
-          y="0"
-          width={this.props.width}
-          height={this.props.height}
+          x={-(size / 4)}
+          y={-(size / 4)}
+          width={size}
+          height={size}
           fill="url('#circles')"
         />
       </g>

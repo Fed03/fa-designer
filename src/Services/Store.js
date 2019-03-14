@@ -105,7 +105,7 @@ class Store {
         srcNode.position,
         trgNode.position
       );
-      const data = new EModels.EdgeData(srcNode.id, trgNode.id);
+      const data = new EModels.EdgeData(srcNode.id, trgNode.id, "");
       this.state.edges.push(
         new EModels.Edge(
           uuid(),
