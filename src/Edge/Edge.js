@@ -5,10 +5,20 @@ import { EditableLabel } from "../EditableLabel";
 import BaseEdge from "./BaseEdge";
 
 class Edge extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isEditing: !this.props.model.data.label
+    };
+  }
   render() {
     const { model, config } = this.props;
     return (
-      <g className="edge-group" onClick={this.selectEdge}>
+      <g
+        className="edge-group"
+        onClick={this.selectEdge}
+        onDoubleClick={this.startEditing}
+      >
         <KeyHandler
           keyEventName={KEYDOWN}
           keyValue="Delete"
@@ -22,13 +32,14 @@ class Edge extends Component {
           })}
         />
 
-        {/* <EditableLabel
-          x={midPoint.x}
-          y={midPoint.y}
+        <EditableLabel
+          x={model.midPoint.x}
+          y={model.midPoint.y}
+          withBackground={true}
           label={model.data.label}
-          isEditing={false}
+          isEditing={this.state.isEditing}
           onChange={this.finishEditing}
-        /> */}
+        />
       </g>
     );
   }
@@ -42,6 +53,13 @@ class Edge extends Component {
     if (model.selected) {
       this.props.onDeleteKey(this.props.model);
     }
+  };
+
+  startEditing = () => this.setState({ isEditing: true });
+
+  finishEditing = newLabel => {
+    this.setState({ isEditing: false });
+    this.props.onChangeLabel(this.props.model, newLabel);
   };
 }
 

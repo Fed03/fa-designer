@@ -7,10 +7,11 @@ class Edge extends BaseEdge {
    * @param {EdgeData} data
    * @param {string} pathDefinition
    */
-  constructor(id, data, pathDefinition) {
+  constructor(id, data, pathDefinition, midPoint) {
     super(id, pathDefinition);
     this.data = data;
     this.selected = false;
+    this.midPoint = midPoint;
   }
 
   get srcNodeId() {
@@ -19,6 +20,10 @@ class Edge extends BaseEdge {
 
   get trgNodeId() {
     return this.data.trgNodeId;
+  }
+
+  updateLabel(label) {
+    this.data.label = label;
   }
 
   isReentrant() {

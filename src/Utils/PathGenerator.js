@@ -25,14 +25,14 @@ class EdgePathGenerator {
   get path() {
     const points = [
       this._edgeSrcPoint,
-      this._translatedMidPoint,
+      this.translatedMidPoint,
       this._edgeTrgPoint
     ];
 
     return EdgePathGenerator._pathFactory(points);
   }
 
-  get _translatedMidPoint() {
+  get translatedMidPoint() {
     const midPoint = this._calcMidPoint();
     const vector = Vector2D.fromPoints(this._edgeSrcPoint, this._edgeTrgPoint);
 

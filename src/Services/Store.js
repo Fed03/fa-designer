@@ -101,10 +101,19 @@ class Store {
 
   createNodesLink(srcNode, trgNode) {
     if (!this._existsAnEdgeBetween(srcNode, trgNode)) {
-      const path = new EdgePathGenerator(srcNode.position, trgNode.position)
-        .path;
+      const generator = new EdgePathGenerator(
+        srcNode.position,
+        trgNode.position
+      );
       const data = new EModels.EdgeData(srcNode.id, trgNode.id);
-      this.state.edges.push(new EModels.Edge(uuid(), data, path));
+      this.state.edges.push(
+        new EModels.Edge(
+          uuid(),
+          data,
+          generator.path,
+          generator.translatedMidPoint
+        )
+      );
 
       this._setState();
     }
@@ -174,17 +183,18 @@ class Store {
     this._setState();
   }
 
-  updateLabel(node, label) {
-    node.updateLabel(label);
+  updateLabel(component, label) {
+    component.updateLabel(label);
     this._setState();
   }
 
   _updateEdgePosition(edge) {
     const srcPosition = this._getNodeById(edge.srcNodeId).position;
     const trgPosition = this._getNodeById(edge.trgNodeId).position;
-    const newPath = new EdgePathGenerator(srcPosition, trgPosition).path;
+    const generator = new EdgePathGenerator(srcPosition, trgPosition);
 
-    edge.pathDefinition = newPath;
+    edge.pathDefinition = generator.path;
+    edge.midPoint = generator.translatedMidPoint;
   }
 
   _getNodeById(id) {

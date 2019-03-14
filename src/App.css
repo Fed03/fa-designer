@@ -18,7 +18,7 @@
 .node-group {
   cursor: pointer;
 }
-.node-group text {
+.editable-input text {
   pointer-events: none;
   user-select: none;
 }
@@ -43,4 +43,11 @@
 
 .label-input {
   padding: 0 5px;
+}
+
+.edge-group .editable-input-background {
+  stroke: #bbb;
+  stroke-opacity: 0.5;
+  fill: #f5f5f5;
+  fill-opacity: 0.7;
 }

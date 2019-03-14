@@ -4,6 +4,9 @@ const width = 160;
 const height = 30;
 
 class EditableLabel extends Component {
+  labelRef = React.createRef();
+  bg = React.createRef();
+
   constructor(props) {
     super(props);
     this.state = {
@@ -11,11 +14,35 @@ class EditableLabel extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setbg();
+  }
+
+  componentDidUpdate() {
+    this.setbg();
+  }
+
+  setbg() {
+    if (this._hasBackground) {
+      const padding = 4;
+      const { x, y, height, width } = this.labelRef.current.getBBox();
+      const bg = this.bg.current;
+
+      bg.setAttribute("x", x - padding);
+      bg.setAttribute("y", y - padding);
+      bg.setAttribute("height", height + padding * 2);
+      bg.setAttribute("width", width + padding * 2);
+    }
+  }
+
   render() {
     const { x, y, label } = this.props;
     return (
-      <g>
-        <text x={x} y={y} textAnchor="middle">
+      <g className="editable-input">
+        {this._hasBackground && (
+          <rect className="editable-input-background" ref={this.bg} />
+        )}
+        <text ref={this.labelRef} x={x} y={y} textAnchor="middle">
           {label}
         </text>
         {this.renderTextInput()}
@@ -57,6 +84,10 @@ class EditableLabel extends Component {
       this.finishEditing();
     }
   };
+
+  get _hasBackground() {
+    return this.props.withBackground && this.props.label;
+  }
 }
 
 export { EditableLabel };

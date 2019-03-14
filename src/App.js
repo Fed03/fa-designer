@@ -97,6 +97,9 @@ class App extends Component {
         config={config}
         onClick={edge => this.store.selectEdge(edge)}
         onDeleteKey={edge => this.store.removeEdge(edge)}
+        onChangeLabel={(component, newLabel) =>
+          this.store.updateLabel(component, newLabel)
+        }
       />
     ));
   }
