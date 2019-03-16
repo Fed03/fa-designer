@@ -7,6 +7,7 @@ class AnchorPoint extends Component {
 
   componentDidMount() {
     const drag = d3Drag()
+      .filter(() => !d3Event.shiftKey)
       .on("start", this.startEdgeCreation)
       .on("drag", this.createNewEdge)
       .on("end", () => this.props.onEdgeCreationEnd());
@@ -21,15 +22,27 @@ class AnchorPoint extends Component {
     this.props.onEdgeCreation(AnchorPoint.currentPosition());
   };
 
+  createReentrantEdge = e => {
+    if (e.shiftKey) {
+      this.props.onClick();
+    }
+  };
+
   render() {
     const {
       onEdgeCreationStart,
       onEdgeCreation,
       onEdgeCreationEnd,
+      onClick,
       ...innerProps
     } = this.props;
     return (
-      <circle ref={this.elementRef} className="anchor-point" {...innerProps} />
+      <circle
+        ref={this.elementRef}
+        className="anchor-point"
+        {...innerProps}
+        onClick={this.createReentrantEdge}
+      />
     );
   }
 

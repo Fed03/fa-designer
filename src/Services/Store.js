@@ -4,7 +4,8 @@ import { Node } from "../Node/Models/Node";
 import * as EModels from "../Edge/Models";
 import {
   EdgePathGenerator,
-  CreationEdgePathGenerator
+  CreationEdgePathGenerator,
+  ReentrantEdgePathGenerator
 } from "../Utils/PathGenerator";
 import uuid from "uuid/v1";
 import config from "../Config";
@@ -22,7 +23,7 @@ class Store {
   };
   candidateSrcNode = null;
   candidateTrgNode = null;
-  listeners = [];
+  listeners = new Map();
 
   loadPayload(jsonObj) {
     jsonObj.nodes.forEach(({ id, label, isInitial, isFinal, metadata }) => {
@@ -115,6 +116,23 @@ class Store {
     this._setState();
   }
 
+  createReentrantEdge(node) {
+    if (!this._existsAnEdgeBetween(node, node)) {
+      const generator = new ReentrantEdgePathGenerator(node.position);
+      const data = new EModels.EdgeData(node.id, node.id, "");
+      this.state.edges.push(
+        new EModels.Edge(
+          uuid(),
+          data,
+          generator.path,
+          generator.translatedMidPoint
+        )
+      );
+
+      this._setState();
+    }
+  }
+
   createNodesLink(srcNode, trgNode) {
     if (!this._existsAnEdgeBetween(srcNode, trgNode)) {
       const generator = new EdgePathGenerator(
@@ -205,9 +223,15 @@ class Store {
   }
 
   _updateEdgePosition(edge) {
-    const srcPosition = this.getNodeById(edge.srcNodeId).position;
-    const trgPosition = this.getNodeById(edge.trgNodeId).position;
-    const generator = new EdgePathGenerator(srcPosition, trgPosition);
+    let generator;
+    if (edge.isReentrant) {
+      const nodePosition = this.getNodeById(edge.srcNodeId).position;
+      generator = new ReentrantEdgePathGenerator(nodePosition);
+    } else {
+      const srcPosition = this.getNodeById(edge.srcNodeId).position;
+      const trgPosition = this.getNodeById(edge.trgNodeId).position;
+      generator = new EdgePathGenerator(srcPosition, trgPosition);
+    }
 
     edge.pathDefinition = generator.path;
     edge.midPoint = generator.translatedMidPoint;
@@ -235,12 +259,12 @@ class Store {
     this.state.edges.forEach(e => (e.selected = false));
   }
 
-  addListener(callback) {
-    this.listeners.push(callback);
+  addListener(id, callback) {
+    this.listeners.set(id, callback);
   }
 
-  removeListener(callback) {
-    this.listeners = this.listeners.filter(c => c !== callback);
+  removeListener(id) {
+    this.listeners.delete(id);
   }
 }
 
@@ -253,14 +277,15 @@ function withStore(WrappedComponent, selectData) {
       this.state = {
         data: selectData(store, props)
       };
+      this.id = uuid();
     }
 
     componentDidMount() {
-      store.addListener(this.handleChange);
+      store.addListener(this.id, this.handleChange);
     }
 
     componentWillUnmount() {
-      store.removeListener(this.handleChange);
+      store.removeListener(this.id);
     }
 
     handleChange = () => {

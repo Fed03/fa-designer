@@ -45,6 +45,11 @@ class Node extends Component {
     this.props.store.removeCreationEdge();
   };
 
+  createReentrantEdge = () => {
+    const { model, store } = this.props;
+    store.createReentrantEdge(model);
+  };
+
   handleMouseEnter = () => {
     const { model, store } = this.props;
 
@@ -174,6 +179,7 @@ class Node extends Component {
           onEdgeCreationStart={this.handleStartOfEdgeCreation}
           onEdgeCreation={this.handleEdgeCreation}
           onEdgeCreationEnd={this.handleEndOfEdgeCreation}
+          onClick={this.createReentrantEdge}
           display={this.state.showAnchorPoints ? "inline" : "none"}
           cx={x}
           cy={y}

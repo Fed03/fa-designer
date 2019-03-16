@@ -101,11 +101,13 @@ class App extends Component {
           </g>
 
           <g ref={this.entitiesRef}>
-            {this.renderEdges()}
-            {creationEdge && (
-              <Components.BaseEdge config={config} model={creationEdge} />
-            )}
-            {this.renderNodes()}
+            <g>{this.renderNodes()}</g>
+            <g>
+              {this.renderEdges()}
+              {creationEdge && (
+                <Components.BaseEdge config={config} model={creationEdge} />
+              )}
+            </g>
             {selectionBox.visible && (
               <rect
                 x={selectionBox.x}

@@ -9,6 +9,8 @@ class EdgePathGenerator {
     .y(d => d.y)
     .curve(d3Shape.curveBasis);
 
+  midPointTranslateConstant = 0.12;
+
   constructor(srcCenterPosition, trgCenterPosition) {
     this._srcCenterPoint = new Point2D(
       srcCenterPosition.x,
@@ -39,7 +41,7 @@ class EdgePathGenerator {
     return EdgePathGenerator._perpTranslate(
       vector,
       midPoint,
-      -0.12 * vector.length()
+      -this.midPointTranslateConstant * vector.length()
     );
   }
 
@@ -137,4 +139,95 @@ class CreationEdgePathGenerator extends EdgePathGenerator {
   }
 }
 
-export { EdgePathGenerator, CreationEdgePathGenerator };
+class ReentrantEdgePathGenerator {
+  numOfInterpolationPoints = 5;
+
+  constructor(centerPosition) {
+    this._centerPoint = new Point2D(centerPosition.x, centerPosition.y);
+
+    this._edgeSrcPoint = this._calculateLineOriginPoint();
+    this._edgeTrgPoint = this._calculateLineEndPoint();
+
+    this._edgeCenterPoint = this._calcEdgeCenterPoint();
+    this._edgeRadius = Vector2D.fromPoints(
+      this._edgeCenterPoint,
+      this._edgeSrcPoint
+    ).length();
+    this._angleBias = this._calcAngleBias();
+  }
+
+  get path() {
+    return EdgePathGenerator._pathFactory(this._interpolationPoints);
+  }
+
+  get translatedMidPoint() {
+    const p = this._interpolationPoints;
+    return p[Math.floor(p.length / 2)];
+  }
+
+  _calcAngleBias() {
+    const xAxis = new Vector2D(1, 0);
+    const otherVector = Vector2D.fromPoints(
+      this._edgeCenterPoint,
+      this._edgeSrcPoint
+    );
+
+    return Math.abs(xAxis.angleBetween(otherVector));
+  }
+
+  _calculateLineEndPoint() {
+    const r = config.nodeRadius;
+
+    const y = -(Math.sqrt(2) / 2) * r;
+    const x = y;
+
+    return this._centerPoint.add(new Point2D(x, y));
+  }
+
+  _calculateLineOriginPoint() {
+    const r = config.nodeRadius;
+
+    const y = -(Math.sqrt(2) / 2) * r;
+    const x = y * -1;
+
+    return this._centerPoint.add(new Point2D(x, y));
+  }
+
+  _calcEdgeCenterPoint() {
+    const chord = Vector2D.fromPoints(this._edgeSrcPoint, this._edgeTrgPoint);
+    const chordLength = chord.length();
+
+    const x = (this._edgeSrcPoint.x + this._edgeTrgPoint.x) / 2;
+    const y =
+      this._edgeSrcPoint.y -
+      chordLength / (2 * Math.tan(this._angleBetweenInterPoints / 2));
+
+    return new Point2D(x, y);
+  }
+
+  get _angleBetweenInterPoints() {
+    return (2 * Math.PI) / this.numOfInterpolationPoints;
+  }
+
+  get _interpolationPoints() {
+    let points = [this._edgeSrcPoint];
+
+    let angle = -this._angleBias;
+    for (let i = 0; i < this.numOfInterpolationPoints - 2; i++) {
+      angle += this._angleBetweenInterPoints;
+      let x = this._edgeRadius * Math.cos(angle);
+      let y = -this._edgeRadius * Math.sin(angle);
+      points.push(this._edgeCenterPoint.add(new Point2D(x, y)));
+    }
+
+    points.push(this._edgeTrgPoint);
+
+    return points;
+  }
+}
+
+export {
+  EdgePathGenerator,
+  CreationEdgePathGenerator,
+  ReentrantEdgePathGenerator
+};
