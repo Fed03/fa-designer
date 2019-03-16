@@ -23,7 +23,6 @@ class AnchorPoint extends Component {
 
   render() {
     const {
-      node,
       onEdgeCreationStart,
       onEdgeCreation,
       onEdgeCreationEnd,

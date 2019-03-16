@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 // import jsonn from "./dummydata.json";
-import { Store } from "./Services/Store";
+import { withStore } from "./Services/Store";
 import { Background, ArrowHead, DropShadowFilter } from "./Defs";
 import {
   select as d3Select,
@@ -33,23 +33,19 @@ class App extends Component {
     }
   }; */
 
-  constructor(props) {
-    super(props);
-    this.store = new Store(this, {
-      candidateSrcNode: null,
-      candidateTrgNode: null
-    });
-  }
-
   componentDidMount() {
     const drag = d3Drag()
       .filter(() => {
         return d3Event.type !== "mousedown" || !d3Event.altKey;
       })
       .container(this.entitiesRef.current)
-      .on("start", () => this.store.startBoxSelection(d3Event.x, d3Event.y))
-      .on("drag", () => this.store.resizeBoxSelection(d3Event.x, d3Event.y))
-      .on("end", () => this.store.endBoxSelection());
+      .on("start", () =>
+        this.props.store.startBoxSelection(d3Event.x, d3Event.y)
+      )
+      .on("drag", () =>
+        this.props.store.resizeBoxSelection(d3Event.x, d3Event.y)
+      )
+      .on("end", () => this.props.store.endBoxSelection());
 
     const zoom = d3Zoom()
       .filter(() => {
@@ -74,92 +70,88 @@ class App extends Component {
 
   addNewNode() {
     const position = d3Mouse(this.entitiesRef.current);
-    const node = this.store.createNode(position);
-    this.store.selectSingleNode(node);
+    const node = this.props.store.createNode(position);
+    this.props.store.selectSingleNode(node);
   }
 
   renderNodes() {
-    const { nodes } = this.state;
+    const { nodes } = this.props.model;
     return nodes.map(node => (
       <Node
         key={node.id}
-        model={node}
+        nodeId={node.id}
         nodeRadius={config.nodeRadius}
         dropShadowId={config.dropShadowId}
-        onEdgeCreationStart={this.handleStartOfEdgeCreation}
-        onEdgeCreation={this.handleEdgeCreation}
-        onEdgeCreationEnd={this.handleEndOfEdgeCreation}
-        onNodeSelection={this.selectNode.bind(this)}
-        onNodeDeletion={this.deleteNode.bind(this)}
-        onMouseEnter={this.handleNodeMouseEnter}
-        onMouseLeave={this.handleNodeMouseLeave}
-        onNodeMove={this.handleNodeTranslate}
-        onChangeLabel={(node, newLabel) =>
-          this.store.updateLabel(node, newLabel)
-        }
+        //onEdgeCreationStart={this.handleStartOfEdgeCreation}
+        //onEdgeCreation={this.handleEdgeCreation}
+        //onEdgeCreationEnd={this.handleEndOfEdgeCreation}
+        //onNodeSelection={this.selectNode.bind(this)}
+        //onNodeDeletion={this.deleteNode.bind(this)}
+        // onMouseEnter={this.handleNodeMouseEnter}
+        // onMouseLeave={this.handleNodeMouseLeave}
+        //onNodeMove={this.handleNodeTranslate}
+        // onChangeLabel={(node, newLabel) =>
+        //   this.props.store.updateLabel(node, newLabel)
+        // }
       />
     ));
   }
 
-  handleNodeTranslate = (node, newPosition) => {
-    this.store.translateNode(
+  /* handleNodeTranslate = (node, newPosition) => {
+    this.props.store.translateNode(
       node,
-      /* this._calcConstrainedPosition(newPosition) */ newPosition
+      /* this._calcConstrainedPosition(newPosition)  newPosition
     );
-  };
+  }; */
 
-  handleNodeMouseEnter = node => {
+  /*  handleNodeMouseEnter = node => {
     this.setState({ candidateTrgNode: node });
   };
 
   handleNodeMouseLeave = () => {
     this.setState({ candidateTrgNode: null });
-  };
+  }; */
 
   renderEdges() {
-    const { edges } = this.state;
+    const { edges } = this.props.model;
     return edges.map(edge => (
       <Components.Edge
         key={edge.id}
         model={edge}
         config={config}
-        onClick={edge => this.store.selectEdge(edge)}
-        onDeleteKey={edge => this.store.removeEdge(edge)}
+        onClick={edge => this.props.store.selectEdge(edge)}
+        onDeleteKey={edge => this.props.store.removeEdge(edge)}
         onChangeLabel={(component, newLabel) =>
-          this.store.updateLabel(component, newLabel)
+          this.props.store.updateLabel(component, newLabel)
         }
       />
     ));
   }
 
-  selectNode(node) {
-    this.store.selectSingleNode(node);
-  }
+  /*   selectNode(node) {
+    this.props.store.selectSingleNode(node);
+  } */
 
-  deleteNode(node) {
-    this.store.removeNode(node);
-  }
+  /*   deleteNode(node) {
+    this.props.store.removeNode(node);
+  } */
 
-  handleStartOfEdgeCreation = (srcNode, targetPosition) => {
-    this.store.addCreationEdge(srcNode.position, targetPosition);
-    this.setState({ candidateSrcNode: srcNode });
-  };
+  /* handleStartOfEdgeCreation = srcNode => {
+    // this.props.store.addCreationEdge(srcNode.position, targetPosition);
+    this.props.store.setEdgeCandidateSrcNode(srcNode);
+  }; */
 
-  handleEdgeCreation = (srcNode, targetPosition) => {
-    this.store.translateCreationEdge(srcNode.position, targetPosition);
-  };
+  /*   handleEndOfEdgeCreation = () => {
+    this.props.store.removeCreationEdge();
 
-  handleEndOfEdgeCreation = () => {
-    this.store.removeCreationEdge();
-
-    const { candidateSrcNode, candidateTrgNode } = this.state;
+    const { candidateSrcNode, candidateTrgNode } = this.props.model;
     if (candidateTrgNode) {
-      this.store.createNodesLink(candidateSrcNode, candidateTrgNode);
+      this.props.store.createNodesLink(candidateSrcNode, candidateTrgNode);
     }
-  };
+  }; */
 
   render() {
-    const { selectionBox, creationEdge } = this.state;
+    const { selectionBox, creationEdge } = this.props.model;
     return (
       <div>
         <svg ref={this.svgRef} width={this.svgWidth} height={this.svgHeight}>
@@ -218,4 +210,4 @@ class App extends Component {
   } */
 }
 
-export default App;
+export default withStore(App, store => store.state);

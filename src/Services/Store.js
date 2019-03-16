@@ -9,6 +9,7 @@ import {
 import uuid from "uuid/v1";
 import config from "../Config";
 import { SelectionBox } from "../Utils/SelectionBox";
+import React, { Component } from "react";
 
 class Store {
   state = {
@@ -19,11 +20,9 @@ class Store {
     },
     creationEdge: null
   };
-
-  constructor(component, initialState = {}) {
-    this._component = component;
-    component.state = { ...initialState, ...this.state };
-  }
+  candidateSrcNode = null;
+  candidateTrgNode = null;
+  listeners = [];
 
   loadPayload(jsonObj) {
     jsonObj.nodes.forEach(({ id, label, isInitial, isFinal, metadata }) => {
@@ -70,8 +69,18 @@ class Store {
     this._setState();
   }
 
-  addCreationEdge(srcPosition, targetPosition) {
-    const path = new CreationEdgePathGenerator(srcPosition, targetPosition)
+  setEdgeCandidateTrgNode(node) {
+    this.candidateTrgNode = node;
+  }
+
+  removeEdgeCandidateTrgNode() {
+    this.setEdgeCandidateTrgNode(null);
+  }
+
+  addCreationEdge(srcNode, targetPosition) {
+    this.candidateSrcNode = srcNode;
+
+    const path = new CreationEdgePathGenerator(srcNode.position, targetPosition)
       .path;
 
     this.state.creationEdge = new EModels.BaseEdge(
@@ -81,21 +90,28 @@ class Store {
     this._setState();
   }
 
-  translateCreationEdge(srcPosition, targetPosition) {
+  translateCreationEdge(targetPosition) {
     const { creationEdge } = this.state;
     if (!creationEdge) {
       return;
     }
 
-    const path = new CreationEdgePathGenerator(srcPosition, targetPosition)
-      .path;
+    const path = new CreationEdgePathGenerator(
+      this.candidateSrcNode.position,
+      targetPosition
+    ).path;
     creationEdge.pathDefinition = path;
 
     this._setState();
   }
 
   removeCreationEdge() {
+    const { candidateSrcNode, candidateTrgNode } = this;
+    if (candidateTrgNode) {
+      this.createNodesLink(candidateSrcNode, candidateTrgNode);
+    }
     this.state.creationEdge = null;
+    this.candidateSrcNode = null;
     this._setState();
   }
 
@@ -189,20 +205,20 @@ class Store {
   }
 
   _updateEdgePosition(edge) {
-    const srcPosition = this._getNodeById(edge.srcNodeId).position;
-    const trgPosition = this._getNodeById(edge.trgNodeId).position;
+    const srcPosition = this.getNodeById(edge.srcNodeId).position;
+    const trgPosition = this.getNodeById(edge.trgNodeId).position;
     const generator = new EdgePathGenerator(srcPosition, trgPosition);
 
     edge.pathDefinition = generator.path;
     edge.midPoint = generator.translatedMidPoint;
   }
 
-  _getNodeById(id) {
+  getNodeById(id) {
     return this.state.nodes.find(n => n.id === id);
   }
 
   _setState() {
-    this._component.setState({ ...this._component.state, ...this.state });
+    this.listeners.forEach(listener => listener());
   }
 
   _existsAnEdgeBetween(srcNode, trgNode) {
@@ -214,9 +230,53 @@ class Store {
   _deselectAllEdges() {
     this.state.edges.forEach(e => (e.selected = false));
   }
+
+  addListener(callback) {
+    this.listeners.push(callback);
+  }
+
+  removeListener(callback) {
+    this.listeners = this.listeners.filter(c => c !== callback);
+  }
 }
 
-// const store = new Store();
-// Object.freeze(store);
+const store = new Store();
 
-export { Store };
+function withStore(WrappedComponent, selectData) {
+  class WithStore extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        data: selectData(store, props)
+      };
+    }
+
+    componentDidMount() {
+      store.addListener(this.handleChange);
+    }
+
+    componentWillUnmount() {
+      store.removeListener(this.handleChange);
+    }
+
+    handleChange = () => {
+      this.setState({
+        data: selectData(store, this.props)
+      });
+    };
+
+    render() {
+      return (
+        <WrappedComponent
+          store={store}
+          model={this.state.data}
+          {...this.props}
+        />
+      );
+    }
+  }
+
+  return WithStore;
+}
+
+export { store, withStore };

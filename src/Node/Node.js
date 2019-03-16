@@ -5,6 +5,7 @@ import { select as d3Select, event as d3Event } from "d3-selection";
 import { drag as d3Drag } from "d3-drag";
 import classnames from "classnames";
 import { EditableLabel } from "../EditableLabel";
+import { withStore } from "../Services/Store";
 
 class Node extends Component {
   nodeCircleRef = React.createRef();
@@ -22,65 +23,70 @@ class Node extends Component {
 
   componentDidMount() {
     const drag = d3Drag()
-      .on("start", () => {
-        const { x, y } = d3Event;
-        const currentPos = this.props.model.position;
-        this.deltaX = currentPos.x - x;
-        this.deltaY = currentPos.y - y;
-      })
-      .on("drag", this.moveNode);
+      .on("start", this.handleStartOfDrag)
+      .on("drag", this.handleDrag);
+
     d3Select(this.nodeCircleRef.current).call(drag);
   }
 
-  handleEdgeCreation = targetPosition => {
-    this.props.onEdgeCreation(this.props.model, targetPosition);
+  handleStartOfEdgeCreation = targetPosition => {
+    const { model, store } = this.props;
+
+    store.addCreationEdge(model, targetPosition);
   };
 
-  handleStartOfEdgeCreation = targetPosition => {
-    this.props.onEdgeCreationStart(this.props.model, targetPosition);
+  handleEdgeCreation = targetPosition => {
+    const { store } = this.props;
+
+    store.translateCreationEdge(targetPosition);
+  };
+
+  handleEndOfEdgeCreation = () => {
+    this.props.store.removeCreationEdge();
   };
 
   handleMouseEnter = () => {
-    this.props.onMouseEnter(this.props.model);
+    const { model, store } = this.props;
+
+    store.setEdgeCandidateTrgNode(model);
     this.setState({
       showAnchorPoints: true
     });
   };
 
   handleMouseLeave = () => {
-    this.props.onMouseLeave(this.props.model);
+    this.props.store.removeEdgeCandidateTrgNode();
     this.setState({
       showAnchorPoints: false
     });
   };
 
-  handleClick() {
-    this._selectNode();
-  }
+  handleClick = () => {
+    this.selectNode();
+  };
 
-  _selectNode() {
-    if (!this.props.model.selected) {
-      this.props.onNodeSelection(this.props.model);
-      this._moveToForeGround();
-    }
-  }
-
-  _moveToForeGround() {
-    const containerEl = this.containerRef.current;
-    containerEl.parentNode.appendChild(containerEl);
-  }
-
-  handleKeyboard(evt) {
+  handleKeyboard = evt => {
     evt.preventDefault();
-    if (this.props.model.selected) {
-      this.props.onNodeDeletion(this.props.model);
-    }
-  }
+    const { model, store } = this.props;
 
-  moveNode = () => {
+    if (model.selected) {
+      store.removeNode(model);
+    }
+  };
+
+  handleStartOfDrag = () => {
     const { x, y } = d3Event;
-    this._selectNode();
-    this.props.onNodeMove(this.props.model, {
+    const currentPos = this.props.model.position;
+    this.deltaX = currentPos.x - x;
+    this.deltaY = currentPos.y - y;
+  };
+
+  handleDrag = () => {
+    const { x, y } = d3Event;
+    const { model, store } = this.props;
+
+    this.selectNode();
+    store.translateNode(model, {
       x: x + this.deltaX,
       y: y + this.deltaY
     });
@@ -91,9 +97,25 @@ class Node extends Component {
   };
 
   finishEditing = newLabel => {
+    const { model, store } = this.props;
+
     this.setState({ isEditing: false });
-    this.props.onChangeLabel(this.props.model, newLabel);
+    store.updateLabel(model, newLabel);
   };
+
+  selectNode() {
+    const { model, store } = this.props;
+
+    if (!model.selected) {
+      store.selectSingleNode(model);
+      this.moveToForeGround();
+    }
+  }
+
+  moveToForeGround() {
+    const containerEl = this.containerRef.current;
+    containerEl.parentNode.appendChild(containerEl);
+  }
 
   render() {
     const { model: node, nodeRadius, dropShadowId } = this.props;
@@ -110,7 +132,7 @@ class Node extends Component {
         <KeyHandler
           keyEventName={KEYDOWN}
           keyValue="Delete"
-          onKeyHandle={this.handleKeyboard.bind(this)}
+          onKeyHandle={this.handleKeyboard}
         />
         <circle
           cx={node.x}
@@ -126,7 +148,7 @@ class Node extends Component {
           cx={node.x}
           cy={node.y}
           r={nodeRadius}
-          onClick={this.handleClick.bind(this)}
+          onClick={this.handleClick}
           filter={`url(#${dropShadowId})`}
           onDoubleClick={this.startEditing}
         />
@@ -150,10 +172,9 @@ class Node extends Component {
       return (
         <AnchorPoint
           key={i}
-          node={model}
           onEdgeCreationStart={this.handleStartOfEdgeCreation}
           onEdgeCreation={this.handleEdgeCreation}
-          onEdgeCreationEnd={this.props.onEdgeCreationEnd}
+          onEdgeCreationEnd={this.handleEndOfEdgeCreation}
           display={this.state.showAnchorPoints ? "inline" : "none"}
           cx={x}
           cy={y}
@@ -185,4 +206,6 @@ class Node extends Component {
   }
 }
 
-export default Node;
+export default withStore(Node, (store, props) =>
+  store.getNodeById(props.nodeId)
+);
