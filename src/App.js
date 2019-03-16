@@ -102,7 +102,7 @@ class App extends Component {
 
           <g ref={this.entitiesRef}>
             <g>{this.renderNodes()}</g>
-            <g>
+            <g pointerEvents="none">
               {this.renderEdges()}
               {creationEdge && (
                 <Components.BaseEdge config={config} model={creationEdge} />

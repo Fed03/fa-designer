@@ -26,7 +26,7 @@ class Edge extends BaseEdge {
     this.data.label = label;
   }
 
-  isReentrant() {
+  get isReentrant() {
     return this.srcNodeId === this.trgNodeId;
   }
 }

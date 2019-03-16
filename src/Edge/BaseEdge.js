@@ -5,8 +5,9 @@ class BaseEdge extends Component {
   render() {
     const { model, config, className } = this.props;
     return (
-      <g>
+      <g pointerEvents="none">
         <path
+          pointerEvents="none"
           d={model.pathDefinition}
           fill="none"
           stroke="transparent"
