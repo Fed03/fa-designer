@@ -167,7 +167,6 @@ class Node extends Component {
   }
 
   renderAnchorPoints() {
-    const { model } = this.props;
     return Array.from(this.anchorsCoords()).map(([x, y], i) => {
       return (
         <AnchorPoint

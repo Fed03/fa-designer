@@ -3,6 +3,7 @@ import KeyHandler, { KEYDOWN } from "react-key-handler";
 import classnames from "classnames";
 import { EditableLabel } from "../EditableLabel";
 import BaseEdge from "./BaseEdge";
+import { withStore } from "../Services/Store";
 
 class Edge extends Component {
   constructor(props) {
@@ -45,22 +46,27 @@ class Edge extends Component {
   }
 
   selectEdge = () => {
-    this.props.onClick(this.props.model);
+    const { model, store } = this.props;
+    store.selectEdge(model);
   };
 
   handleKeyboard = () => {
-    const { model } = this.props;
+    const { model, store } = this.props;
     if (model.selected) {
-      this.props.onDeleteKey(this.props.model);
+      store.removeEdge(model);
     }
   };
 
   startEditing = () => this.setState({ isEditing: true });
 
   finishEditing = newLabel => {
+    const { model, store } = this.props;
+
     this.setState({ isEditing: false });
-    this.props.onChangeLabel(this.props.model, newLabel);
+    store.updateLabel(model, newLabel);
   };
 }
 
-export default Edge;
+export default withStore(Edge, (store, props) =>
+  store.getEdgeById(props.edgeId)
+);

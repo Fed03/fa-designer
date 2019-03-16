@@ -22,17 +22,6 @@ class App extends Component {
   entitiesRef = React.createRef();
   svgRef = React.createRef();
 
-  /* positionConstraints = {
-    x: {
-      min: config.nodeRadius,
-      max: this.svgWidth - config.nodeRadius
-    },
-    y: {
-      min: config.nodeRadius,
-      max: this.svgHeight - config.nodeRadius
-    }
-  }; */
-
   componentDidMount() {
     const drag = d3Drag()
       .filter(() => {
@@ -82,73 +71,16 @@ class App extends Component {
         nodeId={node.id}
         nodeRadius={config.nodeRadius}
         dropShadowId={config.dropShadowId}
-        //onEdgeCreationStart={this.handleStartOfEdgeCreation}
-        //onEdgeCreation={this.handleEdgeCreation}
-        //onEdgeCreationEnd={this.handleEndOfEdgeCreation}
-        //onNodeSelection={this.selectNode.bind(this)}
-        //onNodeDeletion={this.deleteNode.bind(this)}
-        // onMouseEnter={this.handleNodeMouseEnter}
-        // onMouseLeave={this.handleNodeMouseLeave}
-        //onNodeMove={this.handleNodeTranslate}
-        // onChangeLabel={(node, newLabel) =>
-        //   this.props.store.updateLabel(node, newLabel)
-        // }
       />
     ));
   }
-
-  /* handleNodeTranslate = (node, newPosition) => {
-    this.props.store.translateNode(
-      node,
-      /* this._calcConstrainedPosition(newPosition)  newPosition
-    );
-  }; */
-
-  /*  handleNodeMouseEnter = node => {
-    this.setState({ candidateTrgNode: node });
-  };
-
-  handleNodeMouseLeave = () => {
-    this.setState({ candidateTrgNode: null });
-  }; */
 
   renderEdges() {
     const { edges } = this.props.model;
     return edges.map(edge => (
-      <Components.Edge
-        key={edge.id}
-        model={edge}
-        config={config}
-        onClick={edge => this.props.store.selectEdge(edge)}
-        onDeleteKey={edge => this.props.store.removeEdge(edge)}
-        onChangeLabel={(component, newLabel) =>
-          this.props.store.updateLabel(component, newLabel)
-        }
-      />
+      <Components.Edge key={edge.id} edgeId={edge.id} config={config} />
     ));
   }
-
-  /*   selectNode(node) {
-    this.props.store.selectSingleNode(node);
-  } */
-
-  /*   deleteNode(node) {
-    this.props.store.removeNode(node);
-  } */
-
-  /* handleStartOfEdgeCreation = srcNode => {
-    // this.props.store.addCreationEdge(srcNode.position, targetPosition);
-    this.props.store.setEdgeCandidateSrcNode(srcNode);
-  }; */
-
-  /*   handleEndOfEdgeCreation = () => {
-    this.props.store.removeCreationEdge();
-
-    const { candidateSrcNode, candidateTrgNode } = this.props.model;
-    if (candidateTrgNode) {
-      this.props.store.createNodesLink(candidateSrcNode, candidateTrgNode);
-    }
-  }; */
 
   render() {
     const { selectionBox, creationEdge } = this.props.model;
@@ -190,24 +122,6 @@ class App extends Component {
       </div>
     );
   }
-
-  /* _calcConstrainedPosition(position) {
-    const newPairs = Object.entries(position).map(([k, v]) => {
-      let value = v;
-      value =
-        value < this.positionConstraints[k].min
-          ? this.positionConstraints[k].min
-          : value;
-      value =
-        value > this.positionConstraints[k].max
-          ? this.positionConstraints[k].max
-          : value;
-
-      return { [k]: value };
-    });
-
-    return Object.assign({}, ...newPairs);
-  } */
 }
 
 export default withStore(App, store => store.state);

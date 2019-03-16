@@ -217,6 +217,10 @@ class Store {
     return this.state.nodes.find(n => n.id === id);
   }
 
+  getEdgeById(id) {
+    return this.state.edges.find(n => n.id === id);
+  }
+
   _setState() {
     this.listeners.forEach(listener => listener());
   }
