@@ -176,12 +176,19 @@ class Store {
     }
   }
 
-  translateNode(node, newPosition) {
-    if (newPosition) {
-      node.position = newPosition;
-      this.state.edges
-        .filter(e => node.isPartOfEdge(e))
-        .forEach(e => this._updateEdgePosition(e));
+  translateNode(node, positionDeltas) {
+    if (positionDeltas) {
+      const nodesToMove = this.state.nodes.filter(
+        n => n.selected && n.id !== node.id
+      );
+      nodesToMove.push(node);
+
+      nodesToMove.forEach(n => n.moveOfDeltas(positionDeltas));
+
+      const edges = new Set(
+        nodesToMove.map(n => this._getEdgesByNode(n)).flat()
+      );
+      edges.forEach(e => this._updateEdgePosition(e));
 
       this._setState();
     }
@@ -280,6 +287,10 @@ class Store {
 
   _deselectAllEdges() {
     this.state.edges.forEach(e => (e.selected = false));
+  }
+
+  _getEdgesByNode(node) {
+    return this.state.edges.filter(e => node.isPartOfEdge(e));
   }
 
   addListener(id, callback) {

@@ -36,6 +36,11 @@ class Node {
     this.y = y;
   }
 
+  moveOfDeltas({ dx, dy }) {
+    this.x += dx;
+    this.y += dy;
+  }
+
   updateLabel(label) {
     this.data.label = label;
   }

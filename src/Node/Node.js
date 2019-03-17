@@ -11,8 +11,6 @@ import { withStore } from "../Services/Store";
 class Node extends Component {
   nodeCircleRef = React.createRef();
   containerRef = React.createRef();
-  deltaX = 0;
-  deltaY = 0;
 
   constructor(props) {
     super(props);
@@ -23,9 +21,7 @@ class Node extends Component {
   }
 
   componentDidMount() {
-    const drag = d3Drag()
-      .on("start", this.handleStartOfDrag)
-      .on("drag", this.handleDrag);
+    const drag = d3Drag().on("drag", this.handleDrag);
 
     d3Select(this.nodeCircleRef.current).call(drag);
   }
@@ -84,22 +80,12 @@ class Node extends Component {
     }
   };
 
-  handleStartOfDrag = () => {
-    const { x, y } = d3Event;
-    const currentPos = this.props.model.position;
-    this.deltaX = currentPos.x - x;
-    this.deltaY = currentPos.y - y;
-  };
-
   handleDrag = () => {
-    const { x, y } = d3Event;
+    const { dx, dy } = d3Event;
     const { model, store } = this.props;
 
     this.selectNode();
-    store.translateNode(model, {
-      x: x + this.deltaX,
-      y: y + this.deltaY
-    });
+    store.translateNode(model, { dx, dy });
   };
 
   startEditing = () => {
