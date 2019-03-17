@@ -6,6 +6,7 @@ import BaseEdge from "./BaseEdge";
 import { withStore } from "../Services/Store";
 
 class Edge extends Component {
+  containerRef = React.createRef();
   constructor(props) {
     super(props);
     this.state = {
@@ -16,6 +17,7 @@ class Edge extends Component {
     const { model, config } = this.props;
     return (
       <g
+        ref={this.containerRef}
         className="edge-group"
         onClick={this.selectEdge}
         onDoubleClick={this.startEditing}
@@ -48,6 +50,7 @@ class Edge extends Component {
   selectEdge = () => {
     const { model, store } = this.props;
     store.selectEdge(model);
+    this.moveToForeGround();
   };
 
   handleKeyboard = () => {
@@ -65,6 +68,11 @@ class Edge extends Component {
     this.setState({ isEditing: false });
     store.updateLabel(model, newLabel);
   };
+
+  moveToForeGround() {
+    const containerEl = this.containerRef.current;
+    containerEl.parentNode.appendChild(containerEl);
+  }
 }
 
 export default withStore(Edge, (store, props) =>
