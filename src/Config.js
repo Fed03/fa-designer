@@ -5,7 +5,11 @@ const config = {
     creationId: "creation-edge"
   },
   markerSize: 4,
-  dropShadowId: "drop-shadow-filter"
+  dropShadowId: "drop-shadow-filter",
+  store: {
+    key: "store_state",
+    saveFreq: 2000
+  }
 };
 
 Object.freeze(config);

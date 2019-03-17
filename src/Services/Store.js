@@ -25,13 +25,28 @@ class Store {
   candidateTrgNode = null;
   listeners = new Map();
 
-  loadPayload(jsonObj) {
-    jsonObj.nodes.forEach(({ id, label, isInitial, isFinal, metadata }) => {
-      this.nodes.push(new NodeData(id, label, isInitial, isFinal, metadata));
+  loadPayload({ nodes, edges }) {
+    nodes.forEach(({ data, x, y }) => {
+      let nData = new NodeData(
+        data.id,
+        data.label,
+        data.isInitial,
+        data.isFinal,
+        data.metadata
+      );
+      this.state.nodes.push(new Node(nData, x, y));
     });
 
-    jsonObj.edges.forEach(({ srcNodeId, trgNodeId, metadata }) => {
-      this.edges.push(new EModels.EdgeData(srcNodeId, trgNodeId, metadata));
+    edges.forEach(({ data, id, midPoint, pathDefinition }) => {
+      let eData = new EModels.EdgeData(
+        data.srcNodeId,
+        data.trgNodeId,
+        data.label,
+        data.metadata
+      );
+      this.state.edges.push(
+        new EModels.Edge(id, eData, pathDefinition, midPoint)
+      );
     });
   }
 

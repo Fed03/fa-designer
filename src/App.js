@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./App.css";
-// import jsonn from "./dummydata.json";
 import { withStore } from "./Services/Store";
 import { Background, ArrowHead, DropShadowFilter } from "./Defs";
 import {
