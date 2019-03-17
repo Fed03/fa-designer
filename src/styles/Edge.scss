@@ -1,19 +1,18 @@
 @import "./vars";
 
 #graph-root {
+  .edge {
+    stroke: $edge-color;
+    marker-end: url(#edge-arrow);
+
+    &.edge-selected {
+      stroke: $selected-edge-color;
+      marker-end: url(#selected-edge-arrow);
+      filter: url(#drop-shadow-filter);
+    }
+  }
   .edge-group {
     cursor: pointer;
-
-    .edge {
-      stroke: $edge-color;
-      marker-end: url(#edge-arrow);
-
-      &.edge-selected {
-        stroke: $selected-edge-color;
-        marker-end: url(#selected-edge-arrow);
-        filter: url(#drop-shadow-filter);
-      }
-    }
 
     .editable-input-background {
       stroke: #bbb;
