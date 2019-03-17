@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "../styles/Node.scss";
 import AnchorPoint from "./AnchorPoint";
 import KeyHandler, { KEYDOWN } from "react-key-handler";
 import { select as d3Select, event as d3Event } from "d3-selection";

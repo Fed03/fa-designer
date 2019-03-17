@@ -1,0 +1,40 @@
+@import "./vars";
+
+#graph-root {
+  .node-group {
+    cursor: pointer;
+
+    .node {
+      fill: $node-color;
+      stroke: $node-border-color;
+      stroke-width: 2;
+    }
+
+    .initial-node-marker {
+      fill: none;
+      stroke: $node-border-color;
+      stroke-width: 2;
+    }
+
+    .anchor-point {
+      stroke: $node-border-color;
+      stroke-width: 2;
+      // fill: #e3f2fd;
+      fill: lighten($node-color, 30);
+    }
+
+    &.node-selected {
+      .node {
+        fill: $selected-node-color;
+      }
+
+      .initial-node-marker {
+        stroke: $node-color;
+      }
+
+      .editable-input text {
+        fill: white;
+      }
+    }
+  }
+}

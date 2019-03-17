@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import classnames from "classnames";
+import "../styles/Edge.scss";
 
 class BaseEdge extends Component {
   render() {

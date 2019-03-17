@@ -1,0 +1,20 @@
+@import "./vars";
+
+#graph-root {
+  #edge-arrow {
+    fill: $edge-color;
+  }
+  #selected-edge-arrow {
+    fill: $selected-edge-color;
+  }
+  .editable-input {
+    text {
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .label-input {
+      padding: 0 5px;
+    }
+  }
+}

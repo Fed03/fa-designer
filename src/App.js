@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./styles/App.scss";
 import { withStore } from "./Services/Store";
 import { Background, ArrowHead, DropShadowFilter } from "./Defs";
 import {
@@ -85,7 +85,12 @@ class App extends Component {
     const { selectionBox, creationEdge } = this.props.model;
     return (
       <div>
-        <svg ref={this.svgRef} width={this.svgWidth} height={this.svgHeight}>
+        <svg
+          id="graph-root"
+          ref={this.svgRef}
+          width={this.svgWidth}
+          height={this.svgHeight}
+        >
           <defs>
             <ArrowHead markerSize={config.markerSize} id="edge-arrow" />
             <ArrowHead
@@ -102,7 +107,7 @@ class App extends Component {
             <Background />
           </g>
 
-          <g ref={this.entitiesRef}>
+          <g className="entities-container" ref={this.entitiesRef}>
             <g>
               {this.renderEdges()}
               {creationEdge && (

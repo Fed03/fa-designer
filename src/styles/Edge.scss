@@ -1,0 +1,25 @@
+@import "./vars";
+
+#graph-root {
+  .edge-group {
+    cursor: pointer;
+
+    .edge {
+      stroke: $edge-color;
+      marker-end: url(#edge-arrow);
+
+      &.edge-selected {
+        stroke: $selected-edge-color;
+        marker-end: url(#selected-edge-arrow);
+        filter: url(#drop-shadow-filter);
+      }
+    }
+
+    .editable-input-background {
+      stroke: #bbb;
+      stroke-opacity: 0.5;
+      fill: #f5f5f5;
+      fill-opacity: 0.7;
+    }
+  }
+}
