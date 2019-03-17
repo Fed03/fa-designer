@@ -1,0 +1,21 @@
+$main-color: #e57373;
+
+.bottom-bar {
+  background-color: $main-color;
+  border-top: 5px solid #b71c1c;
+  box-shadow: 0px 1px 10px 2px #777;
+  position: absolute;
+
+  .action-bar {
+    padding: 10px 0;
+    .icon {
+      color: #b71c1c;
+      transition: color 0.25s;
+      cursor: pointer;
+
+      &:hover {
+        color: inherit;
+      }
+    }
+  }
+}

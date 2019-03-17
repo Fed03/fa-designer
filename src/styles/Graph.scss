@@ -1,6 +1,7 @@
 @import "./vars";
 
 #graph-root {
+  flex-grow: 1;
   #edge-arrow {
     fill: $edge-color;
   }

@@ -1,3 +1,4 @@
+import "./index.css";
 import React from "react";
 import config from "./Config";
 import ReactDOM from "react-dom";
