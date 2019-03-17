@@ -1,7 +1,7 @@
 // @ts-nocheck
-import { NodeData } from "../Node/Models/NodeData";
-import { Node } from "../Node/Models/Node";
-import * as EModels from "../Edge/Models";
+
+import { Node, NodeData } from "../Models/Node";
+import { Edge, EdgeData, BaseEdge } from "../Models/Edge";
 import {
   EdgePathGenerator,
   CreationEdgePathGenerator,
@@ -38,15 +38,13 @@ class Store {
     });
 
     edges.forEach(({ data, id, midPoint, pathDefinition }) => {
-      let eData = new EModels.EdgeData(
+      let eData = new EdgeData(
         data.srcNodeId,
         data.trgNodeId,
         data.label,
         data.metadata
       );
-      this.state.edges.push(
-        new EModels.Edge(id, eData, pathDefinition, midPoint)
-      );
+      this.state.edges.push(new Edge(id, eData, pathDefinition, midPoint));
     });
   }
 
@@ -107,10 +105,7 @@ class Store {
     const path = new CreationEdgePathGenerator(srcNode.position, targetPosition)
       .path;
 
-    this.state.creationEdge = new EModels.BaseEdge(
-      config.edge.creationId,
-      path
-    );
+    this.state.creationEdge = new BaseEdge(config.edge.creationId, path);
     this._setState();
   }
 
@@ -142,14 +137,9 @@ class Store {
   createReentrantEdge(node) {
     if (!this._existsAnEdgeBetween(node, node)) {
       const generator = new ReentrantEdgePathGenerator(node.position);
-      const data = new EModels.EdgeData(node.id, node.id, "");
+      const data = new EdgeData(node.id, node.id, "");
       this.state.edges.push(
-        new EModels.Edge(
-          uuid(),
-          data,
-          generator.path,
-          generator.translatedMidPoint
-        )
+        new Edge(uuid(), data, generator.path, generator.translatedMidPoint)
       );
 
       this._setState();
@@ -162,14 +152,9 @@ class Store {
         srcNode.position,
         trgNode.position
       );
-      const data = new EModels.EdgeData(srcNode.id, trgNode.id, null);
+      const data = new EdgeData(srcNode.id, trgNode.id, null);
       this.state.edges.push(
-        new EModels.Edge(
-          uuid(),
-          data,
-          generator.path,
-          generator.translatedMidPoint
-        )
+        new Edge(uuid(), data, generator.path, generator.translatedMidPoint)
       );
 
       this._setState();

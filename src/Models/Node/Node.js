@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
+import { Edge } from "../Edge";
 import { NodeData } from "./NodeData";
-import { Edge } from "../../Edge/Models";
 
 class Node {
   /**

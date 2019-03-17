@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import "../styles/Node.scss";
+import "../../styles/Node.scss";
 import AnchorPoint from "./AnchorPoint";
 import KeyHandler, { KEYDOWN } from "react-key-handler";
 import { select as d3Select, event as d3Event } from "d3-selection";
 import { drag as d3Drag } from "d3-drag";
 import classnames from "classnames";
 import { EditableLabel } from "../EditableLabel";
-import { withStore } from "../Services/Store";
+import { withStore } from "../../Services/Store";
 
 class Node extends Component {
   nodeCircleRef = React.createRef();

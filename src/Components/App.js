@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import "./styles/App.scss";
-import { withStore } from "./Services/Store";
+import "../styles/App.scss";
+import { withStore } from "../Services/Store";
 import { Background, ArrowHead, DropShadowFilter } from "./Defs";
 import {
   select as d3Select,
@@ -8,7 +8,7 @@ import {
   mouse as d3Mouse
 } from "d3-selection";
 import { Node } from "./Node";
-import config from "./Config";
+import config from "../Config";
 import { Components } from "./Edge";
 import { drag as d3Drag } from "d3-drag";
 import { zoom as d3Zoom } from "d3-zoom";

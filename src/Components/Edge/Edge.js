@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import KeyHandler, { KEYDOWN } from "react-key-handler";
-import classnames from "classnames";
-import { EditableLabel } from "../EditableLabel";
 import BaseEdge from "./BaseEdge";
-import { withStore } from "../Services/Store";
+import classnames from "classnames";
+import React, { Component } from "react";
+import { withStore } from "../../Services/Store";
+import { EditableLabel } from "../EditableLabel";
+import KeyHandler, { KEYDOWN } from "react-key-handler";
 
 class Edge extends Component {
   containerRef = React.createRef();

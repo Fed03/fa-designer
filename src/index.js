@@ -1,10 +1,10 @@
 import React from "react";
+import config from "./Config";
 import ReactDOM from "react-dom";
-import "bootstrap/dist/css/bootstrap-reboot.css";
-import App from "./App";
+import App from "./Components/App";
 import localforage from "localforage";
 import { store } from "./Services/Store";
-import config from "./Config";
+import "bootstrap/dist/css/bootstrap-reboot.css";
 
 async function restoreData() {
   const result = await localforage.getItem(config.store.key);
