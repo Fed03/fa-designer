@@ -36,7 +36,8 @@ class Store {
   }
 
   createNode([x, y]) {
-    const data = new NodeData(uuid(), "", false, false);
+    const isInitial = this.state.nodes.length === 0;
+    const data = new NodeData(uuid(), null, isInitial, false);
     const node = new Node(data, x, y);
 
     this.state.nodes.push(node);
@@ -66,6 +67,13 @@ class Store {
     this.deselectAllNodes();
     this._deselectAllEdges();
     node.selected = true;
+
+    this._setState();
+  }
+
+  setNodeAsInitial(node) {
+    this.state.nodes.forEach(n => (n.isInitial = false));
+    node.isInitial = true;
 
     this._setState();
   }
@@ -139,7 +147,7 @@ class Store {
         srcNode.position,
         trgNode.position
       );
-      const data = new EModels.EdgeData(srcNode.id, trgNode.id, "");
+      const data = new EModels.EdgeData(srcNode.id, trgNode.id, null);
       this.state.edges.push(
         new EModels.Edge(
           uuid(),

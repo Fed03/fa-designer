@@ -66,7 +66,11 @@ class Node extends Component {
     });
   };
 
-  handleClick = () => {
+  handleClick = e => {
+    const { model, store } = this.props;
+    if (e.altKey) {
+      store.setNodeAsInitial(model);
+    }
     this.selectNode();
   };
 
@@ -157,6 +161,15 @@ class Node extends Component {
           filter={`url(#${dropShadowId})`}
           onDoubleClick={this.startEditing}
         />
+
+        {node.isInitial && (
+          <circle
+            className="initial-node-marker"
+            cx={node.x}
+            cy={node.y}
+            r={nodeRadius * 0.85}
+          />
+        )}
 
         {this.renderAnchorPoints()}
 

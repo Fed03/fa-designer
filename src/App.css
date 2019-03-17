@@ -41,6 +41,16 @@
   fill: #e3f2fd;
 }
 
+.node-group .initial-node-marker {
+  fill: none;
+  stroke: #1565c0;
+  stroke-width: 2;
+}
+
+.node-group.node-selected .initial-node-marker {
+  stroke: #90caf9;
+}
+
 .label-input {
   padding: 0 5px;
 }

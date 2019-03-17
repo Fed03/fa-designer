@@ -19,6 +19,14 @@ class Node {
     return this.data.id;
   }
 
+  get isInitial() {
+    return this.data.isInitial;
+  }
+
+  set isInitial(val) {
+    this.data.isInitial = val;
+  }
+
   get position() {
     return { x: this.x, y: this.y };
   }
