@@ -24,7 +24,7 @@ class App extends Component {
   componentDidMount() {
     const drag = d3Drag()
       .filter(() => {
-        return d3Event.type !== "mousedown" || !d3Event.altKey;
+        return d3Event.type === "mousedown" && d3Event.altKey;
       })
       .container(this.entitiesRef.current)
       .on("start", () =>
@@ -39,7 +39,7 @@ class App extends Component {
       .filter(() => {
         return (
           d3Event.type !== "dblclick" &&
-          !(d3Event.type === "mousedown" && !d3Event.altKey)
+          !(d3Event.type === "mousedown" && d3Event.altKey)
         );
       })
       .scaleExtent([0.5, 2])
@@ -95,7 +95,10 @@ class App extends Component {
             <DropShadowFilter id={config.dropShadowId} />
           </defs>
 
-          <g ref={this.canvasRef}>
+          <g
+            ref={this.canvasRef}
+            onClick={() => this.props.store.deselectAllNodes()}
+          >
             <Background />
           </g>
 
