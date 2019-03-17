@@ -7,7 +7,7 @@ class AnchorPoint extends Component {
 
   componentDidMount() {
     const drag = d3Drag()
-      .filter(() => !d3Event.shiftKey)
+      .filter(() => !d3Event.altKey)
       .on("start", this.startEdgeCreation)
       .on("drag", this.createNewEdge)
       .on("end", () => this.props.onEdgeCreationEnd());
@@ -23,7 +23,7 @@ class AnchorPoint extends Component {
   };
 
   createReentrantEdge = e => {
-    if (e.shiftKey) {
+    if (e.altKey) {
       this.props.onClick();
     }
   };
