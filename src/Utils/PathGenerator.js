@@ -176,7 +176,7 @@ class ReentrantEdgePathGenerator {
   }
 
   _calculateLineEndPoint() {
-    const r = config.nodeRadius;
+    const r = EdgePathGenerator._markerAwareRadius;
 
     const y = -(Math.sqrt(2) / 2) * r;
     const x = y;
