@@ -16,7 +16,7 @@ class Node extends Component {
     super(props);
     this.state = {
       showAnchorPoints: false,
-      isEditing: !this.props.model.data.label
+      isEditing: !this.props.model.node.data.label
     };
   }
 
@@ -27,9 +27,12 @@ class Node extends Component {
   }
 
   handleStartOfEdgeCreation = targetPosition => {
-    const { model, store } = this.props;
+    const {
+      model: { node },
+      store
+    } = this.props;
 
-    store.addCreationEdge(model, targetPosition);
+    store.addCreationEdge(node, targetPosition);
   };
 
   handleEdgeCreation = targetPosition => {
@@ -43,14 +46,20 @@ class Node extends Component {
   };
 
   createReentrantEdge = () => {
-    const { model, store } = this.props;
-    store.createReentrantEdge(model);
+    const {
+      model: { node },
+      store
+    } = this.props;
+    store.createReentrantEdge(node);
   };
 
   handleMouseEnter = () => {
-    const { model, store } = this.props;
+    const {
+      model: { node },
+      store
+    } = this.props;
 
-    store.setEdgeCandidateTrgNode(model);
+    store.setEdgeCandidateTrgNode(node);
     this.setState({
       showAnchorPoints: true
     });
@@ -64,28 +73,37 @@ class Node extends Component {
   };
 
   handleClick = e => {
-    const { model, store } = this.props;
+    const {
+      model: { node },
+      store
+    } = this.props;
     if (e.altKey) {
-      store.setNodeAsInitial(model);
+      store.setNodeAsInitial(node);
     }
     this.selectNode();
   };
 
   handleKeyboard = evt => {
     evt.preventDefault();
-    const { model, store } = this.props;
+    const {
+      model: { node },
+      store
+    } = this.props;
 
-    if (model.selected) {
-      store.removeNode(model);
+    if (node.selected) {
+      store.removeNode(node);
     }
   };
 
   handleDrag = () => {
     const { dx, dy } = d3Event;
-    const { model, store } = this.props;
+    const {
+      model: { node },
+      store
+    } = this.props;
 
     this.selectNode();
-    store.translateNode(model, { dx, dy });
+    store.translateNode(node, { dx, dy });
   };
 
   startEditing = () => {
@@ -93,17 +111,23 @@ class Node extends Component {
   };
 
   finishEditing = newLabel => {
-    const { model, store } = this.props;
+    const {
+      model: { node },
+      store
+    } = this.props;
 
     this.setState({ isEditing: false });
-    store.updateLabel(model, newLabel);
+    store.updateLabel(node, newLabel);
   };
 
   selectNode() {
-    const { model, store } = this.props;
+    const {
+      model: { node },
+      store
+    } = this.props;
 
-    if (!model.selected) {
-      store.selectSingleNode(model);
+    if (!node.selected) {
+      store.selectSingleNode(node);
       this.moveToForeGround();
     }
   }
@@ -114,7 +138,12 @@ class Node extends Component {
   }
 
   render() {
-    const { model: node, nodeRadius, dropShadowId } = this.props;
+    const {
+      model: { node, altKey },
+      nodeRadius,
+      dropShadowId
+    } = this.props;
+    if (!node) return null;
     return (
       <g
         id={node.id}
@@ -140,7 +169,7 @@ class Node extends Component {
 
         <circle
           ref={this.nodeCircleRef}
-          className="node"
+          className={classnames("node", { altKey })}
           cx={node.x}
           cy={node.y}
           r={nodeRadius}
@@ -191,7 +220,9 @@ class Node extends Component {
 
   *anchorsCoords() {
     const {
-      model: { x, y },
+      model: {
+        node: { x, y }
+      },
       nodeRadius
     } = this.props;
     const xCoords = [x - nodeRadius, x + nodeRadius];
@@ -211,6 +242,7 @@ class Node extends Component {
   }
 }
 
-export default withStore(Node, (store, props) =>
-  store.getNodeById(props.nodeId)
-);
+export default withStore(Node, (store, props) => ({
+  node: store.getNodeById(props.nodeId),
+  altKey: store.state.altKey
+}));

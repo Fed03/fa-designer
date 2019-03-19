@@ -6,6 +6,7 @@ import {
 import { Node } from "./Node";
 import "../styles/Graph.scss";
 import config from "../Config";
+import classnames from "classnames";
 import { Components } from "./Edge";
 import React, { Component } from "react";
 import { drag as d3Drag } from "d3-drag";
@@ -79,7 +80,7 @@ class Graph extends Component {
   }
 
   render() {
-    const { selectionBox, creationEdge } = this.props.model;
+    const { selectionBox, creationEdge, altKey } = this.props.model;
     return (
       <svg id="graph-root" ref={this.svgRef}>
         <defs>
@@ -91,6 +92,7 @@ class Graph extends Component {
         <g
           ref={this.canvasRef}
           onClick={() => this.props.store.deselectAllNodes()}
+          className={classnames("canvas", { altKey })}
         >
           <Background />
         </g>

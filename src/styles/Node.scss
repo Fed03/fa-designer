@@ -8,6 +8,9 @@
       fill: $node-color;
       stroke: $node-border-color;
       stroke-width: 2;
+      &.altKey {
+        cursor: context-menu;
+      }
     }
 
     .initial-node-marker {

@@ -6,7 +6,7 @@ class BaseEdge extends Component {
   render() {
     const { model, config, className } = this.props;
     return (
-      <g>
+      <g className="base-edge-group">
         <path
           d={model.pathDefinition}
           fill="none"

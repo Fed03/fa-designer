@@ -11,9 +11,11 @@
       filter: url(#drop-shadow-filter);
     }
   }
-  .edge-group {
-    cursor: pointer;
 
+  .base-edge-group {
+    cursor: pointer;
+  }
+  .edge-group {
     .editable-input-background {
       stroke: #bbb;
       stroke-opacity: 0.5;

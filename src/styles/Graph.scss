@@ -2,12 +2,23 @@
 
 #graph-root {
   flex-grow: 1;
+
   #edge-arrow {
     fill: $edge-color;
   }
+
   #selected-edge-arrow {
     fill: $selected-edge-color;
   }
+
+  .canvas {
+    cursor: all-scroll;
+
+    &.altKey {
+      cursor: cell;
+    }
+  }
+
   .editable-input {
     text {
       pointer-events: none;

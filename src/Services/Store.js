@@ -19,7 +19,8 @@ class Store {
     selectionBox: {
       visible: false
     },
-    creationEdge: null
+    creationEdge: null,
+    altKey: false
   };
   candidateSrcNode = null;
   candidateTrgNode = null;
@@ -284,6 +285,16 @@ class Store {
 
   removeListener(id) {
     this.listeners.delete(id);
+  }
+
+  setAltKeyDown() {
+    this.state.altKey = true;
+    this._setState();
+  }
+
+  setAltKeyUp() {
+    this.state.altKey = false;
+    this._setState();
   }
 }
 

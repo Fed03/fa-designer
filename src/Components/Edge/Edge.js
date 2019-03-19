@@ -15,7 +15,7 @@ class Edge extends Component {
   }
   render() {
     const { model, config } = this.props;
-    if (!model) return;
+    if (!model) return null;
     return (
       <g
         ref={this.containerRef}
