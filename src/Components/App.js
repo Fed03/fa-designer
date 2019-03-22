@@ -1,5 +1,5 @@
 import Graph from "./Graph";
-import BottomBar from "./BottomBar";
+import { BottomBar } from "./BottomBar";
 import React, { Component } from "react";
 import KeyHandler, { KEYDOWN, KEYUP } from "react-key-handler";
 import { store } from "../Services/Store";
