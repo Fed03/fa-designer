@@ -325,17 +325,21 @@ function withStore(WrappedComponent, selectData) {
     };
 
     render() {
+      const { forwardedRef, ...innerProps } = this.props;
       return (
         <WrappedComponent
           store={store}
           model={this.state.data}
-          {...this.props}
+          ref={forwardedRef}
+          {...innerProps}
         />
       );
     }
   }
 
-  return WithStore;
+  return React.forwardRef((props, ref) => (
+    <WithStore forwardedRef={ref} {...props} />
+  ));
 }
 
 export { store, withStore };

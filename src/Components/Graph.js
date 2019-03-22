@@ -1,5 +1,6 @@
 import {
   select as d3Select,
+  selectAll as d3SelectAll,
   event as d3Event,
   mouse as d3Mouse
 } from "d3-selection";
@@ -33,25 +34,28 @@ class Graph extends Component {
       )
       .on("end", () => this.props.store.endBoxSelection());
 
-    const zoom = d3Zoom()
+    this.zoom = d3Zoom()
       .filter(() => {
         return (
           d3Event.type !== "dblclick" &&
           !(d3Event.type === "mousedown" && d3Event.altKey)
         );
       })
-      .scaleExtent([0.5, 2])
+      .scaleExtent([config.minZoom, config.maxZoom])
       .on("zoom", () => {
         const transform = d3Event.transform;
-        this.entitiesRef.current.setAttribute("transform", transform);
-        this.canvasRef.current.setAttribute("transform", transform);
+        this.setZoom(transform);
       });
 
-    d3Select(this.svgRef.current).call(zoom);
+    d3Select(this.svgRef.current).call(this.zoom);
 
     d3Select(this.canvasRef.current)
       .on("dblclick", this.addNewNode.bind(this))
       .call(drag);
+  }
+
+  setZoom(transform) {
+    d3SelectAll("[data-affected-by=zoom]").attr("transform", transform);
   }
 
   addNewNode() {
@@ -93,11 +97,16 @@ class Graph extends Component {
           ref={this.canvasRef}
           onClick={() => this.props.store.deselectAllNodes()}
           className={classnames("canvas", { altKey })}
+          data-affected-by="zoom"
         >
           <Background />
         </g>
 
-        <g className="entities-container" ref={this.entitiesRef}>
+        <g
+          className="entities-container"
+          ref={this.entitiesRef}
+          data-affected-by="zoom"
+        >
           <g>
             {this.renderEdges()}
             {creationEdge && (

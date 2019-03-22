@@ -9,7 +9,9 @@ const config = {
   store: {
     key: "store_state",
     saveFreq: 2000
-  }
+  },
+  minZoom: 0.5,
+  maxZoom: 2
 };
 
 Object.freeze(config);
