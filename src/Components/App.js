@@ -6,6 +6,8 @@ import { store } from "../Services/Store";
 import config from "../Config";
 import { zoomIdentity } from "d3-zoom";
 import { select as d3Select } from "d3-selection";
+import { GraphSerializer } from "../Services/GraphSerializer";
+import { ImageSaver } from "../Services/ImageSaver";
 
 class App extends Component {
   GraphRef = React.createRef();
@@ -23,20 +25,60 @@ class App extends Component {
           onKeyHandle={() => store.setAltKeyUp()}
         />
         <Graph ref={this.GraphRef} />
-        <BottomBar onFitClick={this.fitEntities} />
+        <BottomBar
+          onFitClick={this.fitEntities}
+          onDownloadImgClick={this.downloadGraph}
+        >
+          <h3>How to use</h3>
+        </BottomBar>
       </React.Fragment>
     );
   }
 
+  downloadGraph = () => {
+    const { entitiesRef, defRef } = this.GraphRef.current;
+    const maxSize = 1920;
+    const boxInfos = entitiesRef.current.getBBox();
+    if (this.thereAreEntities(boxInfos)) {
+      let imgW;
+      let imgH;
+      if (boxInfos.width >= boxInfos.height) {
+        imgW = maxSize;
+        imgH = (maxSize / boxInfos.width) * boxInfos.height;
+      } else {
+        imgW = (maxSize / boxInfos.height) * boxInfos.width;
+        imgH = maxSize;
+      }
+
+      const graph = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "svg"
+      );
+      graph.id = "graph-root";
+      graph.setAttribute("width", imgW);
+      graph.setAttribute("height", imgH);
+      graph.appendChild(defRef.current.cloneNode(true));
+      const entities = entitiesRef.current.cloneNode(true);
+      graph.appendChild(entities);
+
+      const transformDefinition = this.fitIntoBox(entities.getBBox(), {
+        height: imgH,
+        width: imgW
+      });
+      const newTransform = zoomIdentity
+        .scale(transformDefinition.k)
+        .translate(transformDefinition.x, transformDefinition.y);
+      entities.setAttribute("transform", newTransform);
+
+      const svgString = new GraphSerializer(graph).serialize();
+      new ImageSaver(svgString, imgW, imgH).save("dummy1.png");
+    }
+  };
+
   fitEntities = () => {
     const { svgRef, entitiesRef } = this.GraphRef.current;
 
-    const transformDefinition = {
-      x: 0,
-      y: 0,
-      k: 1
-    };
-
+    let newTransform = zoomIdentity;
     const boxInfos = entitiesRef.current.getBBox();
     if (this.thereAreEntities(boxInfos)) {
       const svgDimesions = {
@@ -44,18 +86,11 @@ class App extends Component {
         width: svgRef.current.clientWidth
       };
 
-      transformDefinition.k = this.calcNextK(svgDimesions, boxInfos);
-
-      const entitiesCenter = this.getBoxCenter(boxInfos);
-      transformDefinition.x =
-        svgDimesions.width / 2 - entitiesCenter.x * transformDefinition.k;
-      transformDefinition.y =
-        svgDimesions.height / 2 - entitiesCenter.y * transformDefinition.k;
+      const transformDefinition = this.fitIntoBox(boxInfos, svgDimesions);
+      newTransform = zoomIdentity
+        .scale(transformDefinition.k)
+        .translate(transformDefinition.x, transformDefinition.y);
     }
-
-    const newTransform = zoomIdentity
-      .scale(transformDefinition.k)
-      .translate(transformDefinition.x, transformDefinition.y);
 
     d3Select(svgRef.current)
       .transition()
@@ -63,14 +98,35 @@ class App extends Component {
       .call(this.GraphRef.current.zoom.transform, newTransform);
   };
 
+  fitIntoBox(whatToFit, box) {
+    const transformDefinition = {
+      x: 0,
+      y: 0,
+      k: 1
+    };
+
+    transformDefinition.k = this.calcNextK(box, whatToFit);
+
+    const whatToFitCenter = this.getBoxCenter(whatToFit);
+    const boxCenter = this.getBoxCenter(box);
+
+    transformDefinition.x =
+      boxCenter.x - whatToFitCenter.x * transformDefinition.k;
+
+    transformDefinition.y =
+      boxCenter.y - whatToFitCenter.y * transformDefinition.k;
+
+    return transformDefinition;
+  }
+
   thereAreEntities(entitiesBox) {
     return entitiesBox.width > 0 && entitiesBox.height > 0;
   }
 
   getBoxCenter(box) {
     return {
-      x: box.x + box.width / 2,
-      y: box.y + box.height / 2
+      x: (box.x || 0) + box.width / 2,
+      y: (box.y || 0) + box.height / 2
     };
   }
 

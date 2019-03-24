@@ -19,6 +19,7 @@ class Graph extends Component {
   canvasRef = React.createRef();
   entitiesRef = React.createRef();
   svgRef = React.createRef();
+  defRef = React.createRef();
 
   componentDidMount() {
     const drag = d3Drag()
@@ -87,7 +88,7 @@ class Graph extends Component {
     const { selectionBox, creationEdge, altKey } = this.props.model;
     return (
       <svg id="graph-root" ref={this.svgRef}>
-        <defs>
+        <defs ref={this.defRef}>
           <ArrowHead markerSize={config.markerSize} id="edge-arrow" />
           <ArrowHead markerSize={config.markerSize} id="selected-edge-arrow" />
           <DropShadowFilter id={config.dropShadowId} />

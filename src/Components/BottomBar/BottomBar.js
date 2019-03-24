@@ -31,18 +31,7 @@ class BottomBar extends Component {
                 style={{ marginBottom: `${style.mb}px` }}
               >
                 {this.renderActionBar()}
-                <div className="bar-content">
-                  {/*this.props.children*/}
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Officia, accusamus sequi iste dolores iure placeat enim fugiat
-                  dolorum, reiciendis possimus maxime dignissimos labore amet
-                  optio voluptates nisi voluptatum asperiores, quidem doloribus.
-                  Quo, eveniet. Numquam obcaecati minus unde est recusandae, eum
-                  error a repellat nisi quos quo ut aspernatur amet minima vero
-                  voluptas. Facere non qui, dolorem odit consequuntur nam maxime
-                  eligendi, sit corrupti excepturi quasi necessitatibus
-                  similique ea magnam ex ducimus! Ea, unde distinctio.
-                </div>
+                <div className="bar-content">{this.props.children}</div>
               </section>
             )}
           </Spring>
@@ -61,6 +50,7 @@ class BottomBar extends Component {
       <ActionBar
         onResize={this.setActionBarHeight}
         onFitClick={this.props.onFitClick}
+        onDownloadImgClick={this.props.onDownloadImgClick}
         toggleBar={this.toggleBar}
       />
     );

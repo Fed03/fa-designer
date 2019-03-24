@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faQuestion,
-  faExpand /*, faTimes*/
+  faExpand,
+  faFileImage /*, faTimes*/
 } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/ActionBar.scss";
 
@@ -14,13 +15,13 @@ class ActionBar extends Component {
         <div className="expansion-icons" onClick={this.props.toggleBar}>
           <FontAwesomeIcon
             icon={faQuestion}
-            size="3x"
+            size="2x"
             fixedWidth
             className="icon icon-default"
           />
           {/* <FontAwesomeIcon
               icon={faTimes}
-              size="3x"
+              size="2x"
               fixedWidth
               className="icon icon-exanded"
             /> */}
@@ -28,7 +29,15 @@ class ActionBar extends Component {
         <div onClick={this.props.onFitClick}>
           <FontAwesomeIcon
             icon={faExpand}
-            size="3x"
+            size="2x"
+            fixedWidth
+            className="icon"
+          />
+        </div>
+        <div onClick={this.props.onDownloadImgClick}>
+          <FontAwesomeIcon
+            icon={faFileImage}
+            size="2x"
             fixedWidth
             className="icon"
           />
