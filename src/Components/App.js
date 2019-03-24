@@ -88,10 +88,9 @@ class App extends Component {
 
       const transformDefinition = this.fitIntoBox(boxInfos, svgDimesions);
       newTransform = zoomIdentity
-        .scale(transformDefinition.k)
-        .translate(transformDefinition.x, transformDefinition.y);
+        .translate(transformDefinition.x, transformDefinition.y)
+        .scale(transformDefinition.k);
     }
-
     d3Select(svgRef.current)
       .transition()
       .duration(750)
