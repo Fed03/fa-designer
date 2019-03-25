@@ -14,7 +14,6 @@
     "d3-transition": "^1.2.0",
     "d3-zoom": "^1.7.3",
     "file-saver": "^2.0.1",
-    "juice": "^5.2.0",
     "kld-intersections": "^0.4.3",
     "localforage": "^1.7.3",
     "node-sass": "^4.11.0",

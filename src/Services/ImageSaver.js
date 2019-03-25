@@ -1,9 +1,8 @@
 import { saveAs } from "file-saver";
-import juice from "juice";
 
 class ImageSaver {
   constructor(imgString, width, height) {
-    this.imgString = juice(imgString);
+    this.imgString = imgString;
     this.width = width;
     this.height = height;
   }
@@ -15,9 +14,6 @@ class ImageSaver {
 
     this.imgObj = new Image();
     this.imgObj.onload = this._onLoadImg;
-    this.imgObj.onerror = function() {
-      console.log(arguments);
-    };
     this.imgObj.src = this._imgSrc;
   }
 
