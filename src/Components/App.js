@@ -2,6 +2,7 @@ import Graph from "./Graph";
 import config from "../Config";
 import { BottomBar } from "./BottomBar";
 import React, { Component } from "react";
+import ReactTooltip from "react-tooltip";
 import { store } from "../Services/Store";
 import { select as d3Select } from "d3-selection";
 import { ImageSaver } from "../Services/ImageSaver";
@@ -37,6 +38,7 @@ class App extends Component {
         >
           <h3>How to use</h3>
         </BottomBar>
+        <ReactTooltip type="dark" effect="solid" place="top" />
       </React.Fragment>
     );
   }

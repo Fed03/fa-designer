@@ -26,7 +26,7 @@ class ActionBar extends Component {
               className="icon icon-exanded"
             /> */}
         </div>
-        <div onClick={this.props.onFitClick}>
+        <div data-tip="Fit graph" onClick={this.props.onFitClick}>
           <FontAwesomeIcon
             icon={faExpand}
             size="2x"
@@ -34,7 +34,7 @@ class ActionBar extends Component {
             className="icon"
           />
         </div>
-        <div onClick={this.props.onDownloadImgClick}>
+        <div data-tip="Export as PNG" onClick={this.props.onDownloadImgClick}>
           <FontAwesomeIcon
             icon={faFileImage}
             size="2x"

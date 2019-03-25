@@ -43,27 +43,25 @@ class Graph extends Component {
         );
       })
       .scaleExtent([config.minZoom, config.maxZoom])
-      .on("zoom", () => {
-        const transform = d3Event.transform;
-        this.setZoom(transform);
-      });
+      .on("zoom", this.setZoom);
 
     d3Select(this.svgRef.current).call(this.zoom);
 
     d3Select(this.canvasRef.current)
-      .on("dblclick", this.addNewNode.bind(this))
+      .on("dblclick", this.addNewNode)
       .call(drag);
   }
 
-  setZoom(transform) {
+  setZoom = () => {
+    const transform = d3Event.transform;
     d3SelectAll("[data-affected-by=zoom]").attr("transform", transform);
-  }
+  };
 
-  addNewNode() {
+  addNewNode = () => {
     const position = d3Mouse(this.entitiesRef.current);
     const node = this.props.store.createNode(position);
     this.props.store.selectSingleNode(node);
-  }
+  };
 
   renderNodes() {
     const { nodes } = this.props.model;
