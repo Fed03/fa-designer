@@ -87,7 +87,7 @@ class Graph extends Component {
   render() {
     const { selectionBox, creationEdge, altKey } = this.props.model;
     return (
-      <svg id="graph-root" ref={this.svgRef}>
+      <svg id={config.graphId} ref={this.svgRef}>
         <defs ref={this.defRef}>
           <ArrowHead markerSize={config.markerSize} id="edge-arrow" />
           <ArrowHead markerSize={config.markerSize} id="selected-edge-arrow" />

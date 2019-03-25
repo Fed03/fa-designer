@@ -57,7 +57,7 @@ class App extends Component {
     }
 
     const graph = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    graph.id = "graph-root";
+    graph.id = config.graphId;
     graph.setAttribute("width", imgW);
     graph.setAttribute("height", imgH);
     graph.appendChild(defRef.current.cloneNode(true));

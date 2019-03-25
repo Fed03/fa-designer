@@ -11,7 +11,8 @@ const config = {
     saveFreq: 2000
   },
   minZoom: 0.5,
-  maxZoom: 2
+  maxZoom: 2,
+  graphId: "graph-root"
 };
 
 Object.freeze(config);
