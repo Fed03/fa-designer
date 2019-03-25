@@ -6,6 +6,7 @@ import App from "./Components/App";
 import localforage from "localforage";
 import { store } from "./Services/Store";
 import "bootstrap/dist/css/bootstrap-reboot.css";
+import "bootstrap/dist/css/bootstrap-grid.css";
 
 async function restoreData() {
   const result = await localforage.getItem(config.store.key);

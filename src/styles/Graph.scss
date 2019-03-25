@@ -3,6 +3,7 @@
 #graph-root {
   flex-grow: 1;
   width: 100vw;
+  max-height: 100vh;
 
   #edge-arrow {
     fill: $edge-color;
