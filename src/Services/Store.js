@@ -148,7 +148,7 @@ class Store {
   }
 
   createNodesLink(srcNode, trgNode) {
-    if (!this._existsAnEdgeBetween(srcNode, trgNode)) {
+    if (!this._existsAnEdgeBetween(srcNode, trgNode) && srcNode !== trgNode) {
       const generator = new EdgePathGenerator(
         srcNode.position,
         trgNode.position
