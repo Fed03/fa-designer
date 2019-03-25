@@ -13,6 +13,10 @@ class App extends Component {
   GraphRef = React.createRef();
   FitService = new FitGraphService(config.minZoom, config.maxZoom);
 
+  componentDidMount() {
+    setTimeout(() => this.fitEntities(), 1000);
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -70,7 +74,7 @@ class App extends Component {
     entities.setAttribute("transform", newTransform);
 
     const svgString = new GraphSerializer(graph).serialize();
-    new ImageSaver(svgString, imgW, imgH).save("dummy1.png");
+    new ImageSaver(svgString, imgW, imgH).save("FiniteAutomata.png");
   };
 
   fitEntities = () => {
@@ -86,7 +90,7 @@ class App extends Component {
 
     d3Select(svgRef.current)
       .transition()
-      .duration(750)
+      .duration(500)
       .call(this.GraphRef.current.zoom.transform, newTransform);
   };
 }
