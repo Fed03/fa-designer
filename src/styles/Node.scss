@@ -13,7 +13,7 @@
       }
     }
 
-    .initial-node-marker {
+    .final-node-marker {
       fill: none;
       stroke: $node-border-color;
       stroke-width: 2;
@@ -37,6 +37,23 @@
 
       .editable-input text {
         fill: white;
+      }
+    }
+
+    &.isInitial {
+      .node {
+        fill: $primary-color;
+        stroke: $primary-accent-color;
+      }
+      .anchor-point {
+        stroke: $primary-accent-color;
+        fill: lighten($primary-color, 30);
+      }
+
+      &.node-selected {
+        .node {
+          fill: darken($primary-color, 10);
+        }
       }
     }
   }

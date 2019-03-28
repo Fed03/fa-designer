@@ -77,7 +77,9 @@ class Node extends Component {
       model: { node },
       store
     } = this.props;
-    if (e.altKey) {
+    if (e.altKey && !node.isInitial) {
+      store.toggleFinalNodeFlag(node);
+    } else if (e.shiftKey) {
       store.setNodeAsInitial(node);
     }
     this.selectNode();
@@ -106,8 +108,10 @@ class Node extends Component {
     store.translateNode(node, { dx, dy });
   };
 
-  startEditing = () => {
-    this.setState({ isEditing: true });
+  startEditing = e => {
+    if (!e.altKey) {
+      this.setState({ isEditing: true });
+    }
   };
 
   finishEditing = newLabel => {
@@ -148,7 +152,8 @@ class Node extends Component {
       <g
         id={node.id}
         className={classnames("node-group", {
-          "node-selected": node.selected
+          "node-selected": node.selected,
+          isInitial: node.isInitial
         })}
         ref={this.containerRef}
         onMouseEnter={this.handleMouseEnter}
@@ -178,9 +183,9 @@ class Node extends Component {
           onDoubleClick={this.startEditing}
         />
 
-        {node.isInitial && (
+        {node.isFinal && (
           <circle
-            className="initial-node-marker"
+            className="final-node-marker"
             cx={node.x}
             cy={node.y}
             r={nodeRadius * 0.85}

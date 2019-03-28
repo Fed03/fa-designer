@@ -54,8 +54,8 @@ class App extends Component {
                     <ol>
                       <li>A state has been created</li>
                       <li>
-                        Since it is the first in the graph is marked as{" "}
-                        <strong>initial</strong> noted by an internal circle
+                        Since it is the first in the graph, it is marked as{" "}
+                        <strong>initial</strong>, that is its color is red.
                       </li>
                       <li>
                         A textbox appeared in order to let you type the name of
@@ -66,6 +66,8 @@ class App extends Component {
                       Now, let's create another state by{" "}
                       <span className="key-indicator">dblClick</span> in another
                       position.
+                      <br /> Mark it as an acceptance state by{" "}
+                      <span className="key-indicator">Alt+click</span>.
                     </p>
                     <p>
                       You surely have noted that when you{" "}
@@ -122,7 +124,37 @@ class App extends Component {
                       the <strong>fit button</strong> placed just above.
                     </p>
                   </div>
-                  <div className="col" />
+                  <div className="col">
+                    <h3>Deleting objects</h3>
+                    <p>
+                      Selecting single objects is just a{" "}
+                      <span className="key-indicator">click</span> away! Or take
+                      advantage of the multi-selection box aforementioned.
+                      <br />
+                      Once selected, any objects can be removed from grpah by
+                      pressing the <span className="key-indicator">
+                        Del
+                      </span>{" "}
+                      key.
+                    </p>
+                    <h3>Editing graph</h3>
+                    <p>
+                      Every label can be edited through{" "}
+                      <span className="key-indicator">dblClick</span> on the
+                      corresponding object.
+                    </p>
+                    <p>
+                      If you ever need to specify a different initial state,
+                      just <span className="key-indicator">Shift+click</span> on
+                      it!
+                      <br />
+                      If, instead, you want to mark or unmark a state as final
+                      you can <span className="key-indicator">
+                        Alt+click
+                      </span>{" "}
+                      on it.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>

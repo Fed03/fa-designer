@@ -27,6 +27,14 @@ class Node {
     this.data.isInitial = val;
   }
 
+  get isFinal() {
+    return this.data.isFinal;
+  }
+
+  set isFinal(val) {
+    this.data.isFinal = val;
+  }
+
   get position() {
     return { x: this.x, y: this.y };
   }
