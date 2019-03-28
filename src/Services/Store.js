@@ -86,7 +86,6 @@ class Store {
   }
 
   toggleFinalNodeFlag(node) {
-    node.isInitial = false;
     node.isFinal = !node.isFinal;
 
     this._setState();
@@ -95,7 +94,6 @@ class Store {
   setNodeAsInitial(node) {
     this.state.nodes.forEach(n => (n.isInitial = false));
     node.isInitial = true;
-    node.isFinal = false;
 
     this._setState();
   }

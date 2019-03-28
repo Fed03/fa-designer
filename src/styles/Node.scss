@@ -31,7 +31,7 @@
         fill: $selected-node-color;
       }
 
-      .initial-node-marker {
+      .final-node-marker {
         stroke: $node-color;
       }
 
@@ -49,10 +49,16 @@
         stroke: $primary-accent-color;
         fill: lighten($primary-color, 30);
       }
+      .final-node-marker {
+        stroke: $primary-accent-color;
+      }
 
       &.node-selected {
         .node {
           fill: darken($primary-color, 10);
+        }
+        .final-node-marker {
+          stroke: $primary-color;
         }
       }
     }

@@ -77,7 +77,7 @@ class Node extends Component {
       model: { node },
       store
     } = this.props;
-    if (e.altKey && !node.isInitial) {
+    if (e.altKey) {
       store.toggleFinalNodeFlag(node);
     } else if (e.shiftKey) {
       store.setNodeAsInitial(node);
