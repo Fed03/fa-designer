@@ -1,9 +1,10 @@
 body,
-#root {
+main {
   height: 100vh;
+  overflow: hidden;
 }
 
-#root {
+main {
   display: flex;
   flex-direction: column;
   overflow: hidden;

@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faQuestion,
   faExpand,
+  faProjectDiagram,
   faFileImage /*, faTimes*/
 } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/ActionBar.scss";
@@ -37,6 +38,14 @@ class ActionBar extends Component {
         <div data-tip="Export as PNG" onClick={this.props.onDownloadImgClick}>
           <FontAwesomeIcon
             icon={faFileImage}
+            size="2x"
+            fixedWidth
+            className="icon"
+          />
+        </div>
+        <div data-tip="Analyze Graph" onClick={this.props.onAnalyzeDiagram}>
+          <FontAwesomeIcon
+            icon={faProjectDiagram}
             size="2x"
             fixedWidth
             className="icon"

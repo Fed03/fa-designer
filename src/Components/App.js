@@ -10,10 +10,19 @@ import { ImageSaver } from "../Services/ImageSaver";
 import { GraphSerializer } from "../Services/GraphSerializer";
 import { FitGraphService } from "../Services/FitGraphService";
 import KeyHandler, { KEYDOWN, KEYUP } from "react-key-handler";
+import { Drawer } from "./Drawer";
+import { Instructions } from "./Instructions";
 
 class App extends Component {
   GraphRef = React.createRef();
   FitService = new FitGraphService(config.minZoom, config.maxZoom);
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      inAnalyzeMode: false
+    };
+  }
 
   componentDidMount() {
     setTimeout(() => this.fitEntities(), 1000);
@@ -21,7 +30,11 @@ class App extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <Drawer
+        isOpen={this.state.inAnalyzeMode}
+        width={400}
+        drawerContent={this.renderDrawerContent()}
+      >
         <KeyHandler
           keyEventName={KEYDOWN}
           keyValue="Alt"
@@ -32,138 +45,34 @@ class App extends Component {
           keyValue="Alt"
           onKeyHandle={() => store.setAltKeyUp()}
         />
-        <Graph ref={this.GraphRef} />
-        <BottomBar
-          onFitClick={this.fitEntities}
-          onDownloadImgClick={this.downloadGraph}
-        >
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col">
-                <h2 className="section-title">How to get started</h2>
-                <div className="row">
-                  <div className="col">
-                    <h3>Creating and connecting States</h3>
-                    <p>
-                      Let's start with creating our first <strong>State</strong>
-                      !<br />
-                      <span className="key-indicator">dblClick</span> anywhere
-                      on the canvas to create a State.
-                    </p>
-                    <p>Three things happened:</p>
-                    <ol>
-                      <li>A state has been created</li>
-                      <li>
-                        Since it is the first in the graph, it is marked as{" "}
-                        <strong>initial</strong>, that is its color is red.
-                      </li>
-                      <li>
-                        A textbox appeared in order to let you type the name of
-                        the state
-                      </li>
-                    </ol>
-                    <p>
-                      Now, let's create another state by{" "}
-                      <span className="key-indicator">dblClick</span> in another
-                      position.
-                      <br /> Mark it as an acceptance state by{" "}
-                      <span className="key-indicator">Alt+click</span>.
-                    </p>
-                    <p>
-                      You surely have noted that when you{" "}
-                      <span className="key-indicator">hover</span> on a state, 4
-                      smaller circles appear on the cardinal points.
-                      <br />
-                      These circles are the <strong>Anchor points</strong> and
-                      they let you <em>connect</em> 2 states through a
-                      transition.
-                    </p>
-                    <p>
-                      Try to <span className="key-indicator">drag</span> one of
-                      these anchor points. An arrow appears!
-                      <br />
-                      Then release the mouse when above the other state: you
-                      have succesfuly connected 2 states. In addition, a textbox
-                      appeared here too.
-                    </p>
-                    <p>
-                      Last but not least, to create reentrant transition - that
-                      is an edge starting and ending to the same state - just{" "}
-                      <span className="key-indicator">Alt+click</span> on an
-                      Anchor point.
-                    </p>
-                  </div>
-                  <div className="col">
-                    <h3>Mooving & Zooming</h3>
-                    <p>
-                      The editor lets you perform the usual interactions
-                      everyone expects from a graphical editor.
-                    </p>
-                    <ul>
-                      <li>
-                        Dragging the canvas allows you to move freely around
-                      </li>
-                      <li>Every state can be moved through dragging too</li>
-                    </ul>
-                    <p>
-                      In addition, holding the{" "}
-                      <span className="key-indicator">Alt</span> key and
-                      dragging the canvas will create a multi-selection box.
-                      States selected together are grouped; this means that
-                      moving one state will move the others accordingly.
-                    </p>
 
-                    <p>
-                      Zoom is present too, and it is enabled through the mouse{" "}
-                      <span className="key-indicator">scroll</span>
-                    </p>
-
-                    <p>
-                      If playing with translations and zooming took you too far
-                      from your work, you can simply refocus to the graph using
-                      the <strong>fit button</strong> placed just above.
-                    </p>
-                  </div>
-                  <div className="col">
-                    <h3>Deleting objects</h3>
-                    <p>
-                      Selecting single objects is just a{" "}
-                      <span className="key-indicator">click</span> away! Or take
-                      advantage of the multi-selection box aforementioned.
-                      <br />
-                      Once selected, any objects can be removed from grpah by
-                      pressing the <span className="key-indicator">
-                        Del
-                      </span>{" "}
-                      key.
-                    </p>
-                    <h3>Editing graph</h3>
-                    <p>
-                      Every label can be edited through{" "}
-                      <span className="key-indicator">dblClick</span> on the
-                      corresponding object.
-                    </p>
-                    <p>
-                      If you ever need to specify a different initial state,
-                      just <span className="key-indicator">Shift+click</span> on
-                      it!
-                      <br />
-                      If, instead, you want to mark or unmark a state as final
-                      you can <span className="key-indicator">
-                        Alt+click
-                      </span>{" "}
-                      on it.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </BottomBar>
+        <main>
+          <Graph ref={this.GraphRef} />
+          <BottomBar
+            onFitClick={this.fitEntities}
+            onDownloadImgClick={this.downloadGraph}
+            onAnalyzeDiagram={this.switchToAnalyzeMode}
+          >
+            <Instructions />
+          </BottomBar>
+        </main>
         <ReactTooltip type="dark" effect="solid" place="top" />
-      </React.Fragment>
+      </Drawer>
     );
   }
+
+  renderDrawerContent() {
+    return (
+      <section>
+        <h2>Analyze paths</h2>
+      </section>
+    );
+  }
+
+  switchToAnalyzeMode = () => {
+    const { inAnalyzeMode } = this.state;
+    this.setState({ inAnalyzeMode: !inAnalyzeMode });
+  };
 
   downloadGraph = () => {
     const { entitiesRef, defRef } = this.GraphRef.current;

@@ -94,7 +94,7 @@ class Graph extends Component {
 
         <g
           ref={this.canvasRef}
-          onClick={() => this.props.store.deselectAllNodes()}
+          onClick={() => this.props.store.deselectAll()}
           className={classnames("canvas", { altKey })}
           data-affected-by="zoom"
         >

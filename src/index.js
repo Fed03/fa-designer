@@ -1,4 +1,3 @@
-import "./index.css";
 import React from "react";
 import config from "./Config";
 import ReactDOM from "react-dom";
@@ -7,6 +6,7 @@ import localforage from "localforage";
 import { store } from "./Services/Store";
 import "bootstrap/dist/css/bootstrap-reboot.css";
 import "bootstrap/dist/css/bootstrap-grid.css";
+import "./index.css";
 
 async function restoreData() {
   const result = await localforage.getItem(config.store.key);

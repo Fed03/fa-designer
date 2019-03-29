@@ -302,6 +302,12 @@ class Store {
     this.state.altKey = false;
     this._setState();
   }
+
+  deselectAll() {
+    this.deselectAllNodes();
+    this._deselectAllEdges();
+    this._setState();
+  }
 }
 
 const store = new Store();

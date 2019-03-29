@@ -52,6 +52,7 @@ class BottomBar extends Component {
         onFitClick={this.props.onFitClick}
         onDownloadImgClick={this.props.onDownloadImgClick}
         toggleBar={this.toggleBar}
+        onAnalyzeDiagram={this.props.onAnalyzeDiagram}
       />
     );
   }
