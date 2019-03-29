@@ -60,9 +60,11 @@ class Node extends Component {
     } = this.props;
 
     store.setEdgeCandidateTrgNode(node);
-    this.setState({
-      showAnchorPoints: true
-    });
+    if (!this.state.analyzeMode) {
+      this.setState({
+        showAnchorPoints: true
+      });
+    }
   };
 
   handleMouseLeave = () => {
@@ -109,7 +111,7 @@ class Node extends Component {
   };
 
   startEditing = e => {
-    if (!e.altKey) {
+    if (!e.altKey && !this.props.analyzeMode) {
       this.setState({ isEditing: true });
     }
   };
@@ -249,5 +251,6 @@ class Node extends Component {
 
 export default withStore(Node, (store, props) => ({
   node: store.getNodeById(props.nodeId),
-  altKey: store.state.altKey
+  altKey: store.state.altKey,
+  analyzeMode: store.state.analyzeMode
 }));

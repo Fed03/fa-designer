@@ -20,7 +20,8 @@ class Store {
       visible: false
     },
     creationEdge: null,
-    altKey: false
+    altKey: false,
+    analyzeMode: false
   };
   candidateSrcNode = null;
   candidateTrgNode = null;
@@ -50,52 +51,60 @@ class Store {
   }
 
   createNode([x, y]) {
-    const isInitial = this.state.nodes.length === 0;
-    const data = new NodeData(uuid(), null, isInitial, false);
-    const node = new Node(data, x, y);
+    if (!this.state.analyzeMode) {
+      const isInitial = this.state.nodes.length === 0;
+      const data = new NodeData(uuid(), null, isInitial, false);
+      const node = new Node(data, x, y);
 
-    this.state.nodes.push(node);
+      this.state.nodes.push(node);
 
-    this._setState();
-    return node;
+      this._setState();
+      return node;
+    }
   }
 
   removeNode(node) {
-    const newNodes = this.state.nodes.filter(n => n.id !== node.id);
-    const newEdges = this.state.edges.filter(edge => {
-      return !node.isPartOfEdge(edge);
-    });
+    if (!this.state.analyzeMode) {
+      const newNodes = this.state.nodes.filter(n => n.id !== node.id);
+      const newEdges = this.state.edges.filter(edge => {
+        return !node.isPartOfEdge(edge);
+      });
 
-    this.state.nodes = newNodes;
-    this.state.edges = newEdges;
+      this.state.nodes = newNodes;
+      this.state.edges = newEdges;
 
-    this._setState();
+      this._setState();
+    }
   }
 
-  deselectAllNodes() {
+  _deselectAllNodes() {
     this.state.nodes.forEach(node => (node.selected = false));
-    this._setState();
   }
 
   selectSingleNode(node) {
-    this.deselectAllNodes();
-    this._deselectAllEdges();
-    node.selected = true;
+    if (!this.state.analyzeMode) {
+      this.deselectAll();
+      node.selected = true;
 
-    this._setState();
+      this._setState();
+    }
   }
 
   toggleFinalNodeFlag(node) {
-    node.isFinal = !node.isFinal;
+    if (!this.state.analyzeMode) {
+      node.isFinal = !node.isFinal;
 
-    this._setState();
+      this._setState();
+    }
   }
 
   setNodeAsInitial(node) {
-    this.state.nodes.forEach(n => (n.isInitial = false));
-    node.isInitial = true;
+    if (!this.state.analyzeMode) {
+      this.state.nodes.forEach(n => (n.isInitial = false));
+      node.isInitial = true;
 
-    this._setState();
+      this._setState();
+    }
   }
 
   setEdgeCandidateTrgNode(node) {
@@ -107,13 +116,17 @@ class Store {
   }
 
   addCreationEdge(srcNode, targetPosition) {
-    this.candidateSrcNode = srcNode;
+    if (!this.state.analyzeMode) {
+      this.candidateSrcNode = srcNode;
 
-    const path = new CreationEdgePathGenerator(srcNode.position, targetPosition)
-      .path;
+      const path = new CreationEdgePathGenerator(
+        srcNode.position,
+        targetPosition
+      ).path;
 
-    this.state.creationEdge = new BaseEdge(config.edge.creationId, path);
-    this._setState();
+      this.state.creationEdge = new BaseEdge(config.edge.creationId, path);
+      this._setState();
+    }
   }
 
   translateCreationEdge(targetPosition) {
@@ -132,17 +145,19 @@ class Store {
   }
 
   removeCreationEdge() {
-    const { candidateSrcNode, candidateTrgNode } = this;
-    if (candidateTrgNode) {
-      this.createNodesLink(candidateSrcNode, candidateTrgNode);
+    if (!this.state.analyzeMode) {
+      const { candidateSrcNode, candidateTrgNode } = this;
+      if (candidateTrgNode) {
+        this.createNodesLink(candidateSrcNode, candidateTrgNode);
+      }
+      this.state.creationEdge = null;
+      this.candidateSrcNode = null;
+      this._setState();
     }
-    this.state.creationEdge = null;
-    this.candidateSrcNode = null;
-    this._setState();
   }
 
   createReentrantEdge(node) {
-    if (!this._existsAnEdgeBetween(node, node)) {
+    if (!this._existsAnEdgeBetween(node, node) && !this.state.analyzeMode) {
       const generator = new ReentrantEdgePathGenerator(node.position);
       const data = new EdgeData(node.id, node.id, "");
       this.state.edges.push(
@@ -153,7 +168,7 @@ class Store {
     }
   }
 
-  createNodesLink(srcNode, trgNode) {
+  _createNodesLink(srcNode, trgNode) {
     if (!this._existsAnEdgeBetween(srcNode, trgNode) && srcNode !== trgNode) {
       const generator = new EdgePathGenerator(
         srcNode.position,
@@ -169,7 +184,7 @@ class Store {
   }
 
   translateNode(node, positionDeltas) {
-    if (positionDeltas) {
+    if (positionDeltas && !this.state.analyzeMode) {
       const nodesToMove = this.state.nodes.filter(
         n => n.selected && n.id !== node.id
       );
@@ -187,56 +202,64 @@ class Store {
   }
 
   startBoxSelection(mouseX, mouseY) {
-    const { selectionBox } = this.state;
-    this._selectionBox = new SelectionBox(mouseX, mouseY);
+    if (!this.state.analyzeMode) {
+      const { selectionBox } = this.state;
+      this._selectionBox = new SelectionBox(mouseX, mouseY);
 
-    selectionBox.visible = true;
-    this.state.selectionBox = {
-      ...selectionBox,
-      ...this._selectionBox.currentState
-    };
+      selectionBox.visible = true;
+      this.state.selectionBox = {
+        ...selectionBox,
+        ...this._selectionBox.currentState
+      };
 
-    this._setState();
+      this._setState();
+    }
   }
 
   resizeBoxSelection(mouseX, mouseY) {
-    const { selectionBox } = this.state;
-    this.state.selectionBox = {
-      ...selectionBox,
-      ...this._selectionBox.resize(mouseX, mouseY)
-    };
+    if (!this.state.analyzeMode) {
+      const { selectionBox } = this.state;
+      this.state.selectionBox = {
+        ...selectionBox,
+        ...this._selectionBox.resize(mouseX, mouseY)
+      };
 
-    this._setState();
+      this._setState();
+    }
   }
 
   endBoxSelection() {
-    this._deselectAllEdges();
-    this.deselectAllNodes();
+    if (!this.state.analyzeMode) {
+      this.deselectAll();
 
-    this.state.nodes.forEach(node => {
-      if (this._selectionBox.containsNode(node)) {
-        node.selected = true;
-      }
-    });
+      this.state.nodes.forEach(node => {
+        if (this._selectionBox.containsNode(node)) {
+          node.selected = true;
+        }
+      });
 
-    this.state.selectionBox = {
-      visible: false
-    };
-    this._setState();
+      this.state.selectionBox = {
+        visible: false
+      };
+      this._setState();
+    }
   }
 
   selectEdge(edge) {
-    this._deselectAllEdges();
-    this.deselectAllNodes();
-    edge.selected = true;
-    this._setState();
+    if (!this.state.analyzeMode) {
+      this.deselectAll();
+      edge.selected = true;
+      this._setState();
+    }
   }
 
   removeEdge(edge) {
-    const newEdges = this.state.edges.filter(e => e.id !== edge.id);
-    this.state.edges = newEdges;
+    if (!this.state.analyzeMode) {
+      const newEdges = this.state.edges.filter(e => e.id !== edge.id);
+      this.state.edges = newEdges;
 
-    this._setState();
+      this._setState();
+    }
   }
 
   updateLabel(component, label) {
@@ -304,8 +327,13 @@ class Store {
   }
 
   deselectAll() {
-    this.deselectAllNodes();
+    this._deselectAllNodes();
     this._deselectAllEdges();
+    this._setState();
+  }
+
+  toggleAnalyzeMode() {
+    this.state.analyzeMode = !this.state.analyzeMode;
     this._setState();
   }
 }

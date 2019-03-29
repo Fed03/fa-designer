@@ -76,7 +76,9 @@ class EditableLabel extends Component {
   }
 
   finishEditing = () => {
-    this.props.onChange(this.state.value);
+    if (this.state.value) {
+      this.props.onChange(this.state.value);
+    }
   };
 
   handleKeyPress = e => {

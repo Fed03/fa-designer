@@ -12,17 +12,11 @@ import { FitGraphService } from "../Services/FitGraphService";
 import KeyHandler, { KEYDOWN, KEYUP } from "react-key-handler";
 import { Drawer } from "./Drawer";
 import { Instructions } from "./Instructions";
+import { withStore } from "../Services/Store";
 
 class App extends Component {
   GraphRef = React.createRef();
   FitService = new FitGraphService(config.minZoom, config.maxZoom);
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      inAnalyzeMode: false
-    };
-  }
 
   componentDidMount() {
     setTimeout(() => this.fitEntities(), 1000);
@@ -31,7 +25,7 @@ class App extends Component {
   render() {
     return (
       <Drawer
-        isOpen={this.state.inAnalyzeMode}
+        isOpen={this.props.model.inAnalyzeMode}
         width={400}
         drawerContent={this.renderDrawerContent()}
       >
@@ -70,8 +64,7 @@ class App extends Component {
   }
 
   switchToAnalyzeMode = () => {
-    const { inAnalyzeMode } = this.state;
-    this.setState({ inAnalyzeMode: !inAnalyzeMode });
+    this.props.store.toggleAnalyzeMode();
   };
 
   downloadGraph = () => {
@@ -128,4 +121,6 @@ class App extends Component {
   };
 }
 
-export default App;
+export default withStore(App, store => ({
+  inAnalyzeMode: store.state.analyzeMode
+}));
