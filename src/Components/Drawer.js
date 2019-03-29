@@ -1,20 +1,29 @@
 import "../styles/Drawer.scss";
 import React, { Component } from "react";
+import { Spring } from "react-spring/renderprops";
 
 class Drawer extends Component {
   render() {
     const { width, isOpen, children, drawerContent } = this.props;
-    const style = {
-      minWidth: `${width}px`
-    };
     return (
-      <div
-        id="drawer-wrapper"
-        style={{ transform: `translateX(-${width * (isOpen ? 0 : 1)}px)` }}
+      <Spring
+        to={{
+          width: isOpen ? `${width}px` : "0px",
+          transformX: isOpen ? 0 : -width
+        }}
       >
-        <aside style={style}>{drawerContent}</aside>
-        <section>{children}</section>
-      </div>
+        {style => (
+          <div
+            id="drawer-wrapper"
+            style={{ transform: `translateX(${style.transformX}px)` }}
+          >
+            <aside style={{ minWidth: `${width}px` }}>{drawerContent}</aside>
+            <section style={{ width: `calc(100vw - ${style.width})` }}>
+              {children}
+            </section>
+          </div>
+        )}
+      </Spring>
     );
   }
 }
