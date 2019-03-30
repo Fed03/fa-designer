@@ -10,12 +10,15 @@ class Edge extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isEditing: !this.props.model.data.label
+      isEditing: !this.props.model.edge.data.label
     };
   }
   render() {
-    const { model, config } = this.props;
-    if (!model) return null;
+    const {
+      model: { edge },
+      config
+    } = this.props;
+    if (!edge) return null;
     return (
       <g
         ref={this.containerRef}
@@ -29,18 +32,18 @@ class Edge extends Component {
           onKeyHandle={this.handleKeyboard}
         />
         <BaseEdge
-          model={model}
+          model={edge}
           config={config}
           className={classnames({
-            "edge-selected": model.selected
+            "edge-selected": edge.selected
           })}
         />
 
         <EditableLabel
-          x={model.midPoint.x}
-          y={model.midPoint.y}
+          x={edge.midPoint.x}
+          y={edge.midPoint.y}
           withBackground={true}
-          label={model.data.label}
+          label={edge.data.label}
           isEditing={this.state.isEditing}
           onChange={this.finishEditing}
         />
@@ -49,25 +52,38 @@ class Edge extends Component {
   }
 
   selectEdge = () => {
-    const { model, store } = this.props;
-    store.selectEdge(model);
+    const {
+      model: { edge },
+      store
+    } = this.props;
+    store.selectEdge(edge);
     this.moveToForeGround();
   };
 
   handleKeyboard = () => {
-    const { model, store } = this.props;
-    if (model.selected) {
-      store.removeEdge(model);
+    const {
+      model: { edge },
+      store
+    } = this.props;
+    if (edge.selected) {
+      store.removeEdge(edge);
     }
   };
 
-  startEditing = () => this.setState({ isEditing: true });
+  startEditing = () => {
+    if (!this.props.model.analyzeMode) {
+      this.setState({ isEditing: true });
+    }
+  };
 
   finishEditing = newLabel => {
-    const { model, store } = this.props;
+    const {
+      model: { edge },
+      store
+    } = this.props;
 
     this.setState({ isEditing: false });
-    store.updateLabel(model, newLabel);
+    store.updateLabel(edge, newLabel);
   };
 
   moveToForeGround() {
@@ -76,6 +92,7 @@ class Edge extends Component {
   }
 }
 
-export default withStore(Edge, (store, props) =>
-  store.getEdgeById(props.edgeId)
-);
+export default withStore(Edge, (store, props) => ({
+  edge: store.getEdgeById(props.edgeId),
+  analyzeMode: store.state.analyzeMode
+}));

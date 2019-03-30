@@ -55,12 +55,12 @@ class Node extends Component {
 
   handleMouseEnter = () => {
     const {
-      model: { node },
+      model: { node, analyzeMode },
       store
     } = this.props;
 
     store.setEdgeCandidateTrgNode(node);
-    if (!this.state.analyzeMode) {
+    if (!analyzeMode) {
       this.setState({
         showAnchorPoints: true
       });
@@ -111,7 +111,7 @@ class Node extends Component {
   };
 
   startEditing = e => {
-    if (!e.altKey && !this.props.analyzeMode) {
+    if (!e.altKey && !this.props.model.analyzeMode) {
       this.setState({ isEditing: true });
     }
   };
