@@ -13,10 +13,18 @@ import KeyHandler, { KEYDOWN, KEYUP } from "react-key-handler";
 import { Drawer } from "./Drawer";
 import { Instructions } from "./Instructions";
 import { withStore } from "../Services/Store";
+import { SelectInput } from "./SelectInput";
 
 class App extends Component {
   GraphRef = React.createRef();
   FitService = new FitGraphService(config.minZoom, config.maxZoom);
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      nodeSelectedForAnalysis: null
+    };
+  }
 
   componentDidMount() {
     setTimeout(() => this.fitEntities(), 1000);
@@ -56,12 +64,25 @@ class App extends Component {
   }
 
   renderDrawerContent() {
+    const { nodes } = this.props.model;
+    const selectableNodes = nodes.filter(n => !n.isInitial);
     return (
       <section>
         <h2>Analyze paths</h2>
+        <SelectInput
+          defaultOption="Chose node..."
+          data={selectableNodes}
+          onChange={this.handleSelectChange}
+          valueSelector={node => node.id}
+          labelSelector={node => node.data.label}
+        />
       </section>
     );
   }
+
+  handleSelectChange = selectedNode => {
+    this.setState({ nodeSelectedForAnalysis: selectedNode });
+  };
 
   switchToAnalyzeMode = () => {
     this.props.store.toggleAnalyzeMode();
@@ -122,5 +143,6 @@ class App extends Component {
 }
 
 export default withStore(App, store => ({
-  inAnalyzeMode: store.state.analyzeMode
+  inAnalyzeMode: store.state.analyzeMode,
+  nodes: store.state.nodes
 }));
