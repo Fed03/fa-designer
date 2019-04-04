@@ -21,7 +21,8 @@ class Store {
     },
     creationEdge: null,
     altKey: false,
-    analyzeMode: false
+    analyzeMode: false,
+    nodeSelectedForAnalysis: null
   };
   candidateSrcNode = null;
   candidateTrgNode = null;
@@ -332,8 +333,13 @@ class Store {
     this._setState();
   }
 
-  toggleAnalyzeMode() {
+  toggleAnalysisMode() {
     this.state.analyzeMode = !this.state.analyzeMode;
+    this._setState();
+  }
+
+  setNodeSelectedForAnalysis(node) {
+    this.state.nodeSelectedForAnalysis = node;
     this._setState();
   }
 }

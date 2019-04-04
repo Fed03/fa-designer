@@ -19,13 +19,6 @@ class App extends Component {
   GraphRef = React.createRef();
   FitService = new FitGraphService(config.minZoom, config.maxZoom);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      nodeSelectedForAnalysis: null
-    };
-  }
-
   componentDidMount() {
     setTimeout(() => this.fitEntities(), 1000);
   }
@@ -53,7 +46,7 @@ class App extends Component {
           <BottomBar
             onFitClick={this.fitEntities}
             onDownloadImgClick={this.downloadGraph}
-            onAnalyzeDiagram={this.switchToAnalyzeMode}
+            onAnalyzeDiagram={this.switchToAnalysisMode}
           >
             <Instructions />
           </BottomBar>
@@ -81,11 +74,11 @@ class App extends Component {
   }
 
   handleSelectChange = selectedNode => {
-    this.setState({ nodeSelectedForAnalysis: selectedNode });
+    this.props.store.setNodeSelectedForAnalysis(selectedNode);
   };
 
-  switchToAnalyzeMode = () => {
-    this.props.store.toggleAnalyzeMode();
+  switchToAnalysisMode = () => {
+    this.props.store.toggleAnalysisMode();
   };
 
   downloadGraph = () => {
