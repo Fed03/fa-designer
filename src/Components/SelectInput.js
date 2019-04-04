@@ -11,7 +11,7 @@ class SelectInput extends Component {
         : this.initialValue
     };
 
-    this.notifyParentComponent(this.state.las);
+    this.notifyParentComponent(this.state.lastValue);
   }
 
   render() {

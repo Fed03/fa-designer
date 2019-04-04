@@ -62,5 +62,15 @@
         }
       }
     }
+
+    &.node-selected-for-analysis {
+      .node {
+        fill: #ba68c8;
+        stroke: #212529;
+      }
+      .final-node-marker {
+        stroke: #212529;
+      }
+    }
   }
 }

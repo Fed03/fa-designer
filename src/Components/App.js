@@ -57,13 +57,14 @@ class App extends Component {
   }
 
   renderDrawerContent() {
-    const { nodes } = this.props.model;
+    const { nodes, nodeSelectedForAnalysis } = this.props.model;
     const selectableNodes = nodes.filter(n => !n.isInitial);
     return (
       <section>
         <h2>Analyze paths</h2>
         <SelectInput
           defaultOption="Chose node..."
+          selectedValue={nodeSelectedForAnalysis}
           data={selectableNodes}
           onChange={this.handleSelectChange}
           valueSelector={node => node.id}
@@ -137,5 +138,6 @@ class App extends Component {
 
 export default withStore(App, store => ({
   inAnalyzeMode: store.state.analyzeMode,
-  nodes: store.state.nodes
+  nodes: store.state.nodes,
+  nodeSelectedForAnalysis: store.state.nodeSelectedForAnalysis
 }));

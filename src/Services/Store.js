@@ -86,8 +86,9 @@ class Store {
     if (!this.state.analyzeMode) {
       this.deselectAll();
       node.selected = true;
-
       this._setState();
+    } else {
+      this.setNodeSelectedForAnalysis(node);
     }
   }
 
@@ -334,6 +335,7 @@ class Store {
   }
 
   toggleAnalysisMode() {
+    this.deselectAll();
     this.state.analyzeMode = !this.state.analyzeMode;
     this._setState();
   }

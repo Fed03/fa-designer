@@ -132,10 +132,8 @@ class Node extends Component {
       store
     } = this.props;
 
-    if (!node.selected) {
-      store.selectSingleNode(node);
-      this.moveToForeGround();
-    }
+    store.selectSingleNode(node);
+    this.moveToForeGround();
   }
 
   moveToForeGround() {
@@ -145,7 +143,7 @@ class Node extends Component {
 
   render() {
     const {
-      model: { node, altKey },
+      model: { node, altKey, isSelectedForAnalysis },
       nodeRadius,
       dropShadowId
     } = this.props;
@@ -155,7 +153,8 @@ class Node extends Component {
         id={node.id}
         className={classnames("node-group", {
           "node-selected": node.selected,
-          isInitial: node.isInitial
+          isInitial: node.isInitial,
+          "node-selected-for-analysis": isSelectedForAnalysis
         })}
         ref={this.containerRef}
         onMouseEnter={this.handleMouseEnter}
@@ -249,8 +248,14 @@ class Node extends Component {
   }
 }
 
-export default withStore(Node, (store, props) => ({
-  node: store.getNodeById(props.nodeId),
-  altKey: store.state.altKey,
-  analyzeMode: store.state.analyzeMode
-}));
+export default withStore(Node, (store, props) => {
+  const node = store.getNodeById(props.nodeId);
+  const analyzeMode = store.state.analyzeMode;
+  return {
+    node,
+    altKey: store.state.altKey,
+    analyzeMode,
+    isSelectedForAnalysis:
+      node === store.state.nodeSelectedForAnalysis && analyzeMode
+  };
+});
