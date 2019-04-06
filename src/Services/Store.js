@@ -22,7 +22,8 @@ class Store {
     creationEdge: null,
     altKey: false,
     analyzeMode: false,
-    nodeSelectedForAnalysis: null
+    nodeSelectedForAnalysis: null,
+    selectedPath: null
   };
   candidateSrcNode = null;
   candidateTrgNode = null;
@@ -337,11 +338,22 @@ class Store {
   toggleAnalysisMode() {
     this.deselectAll();
     this.state.analyzeMode = !this.state.analyzeMode;
+    this.state.selectedPath = null;
     this._setState();
   }
 
   setNodeSelectedForAnalysis(node) {
     this.state.nodeSelectedForAnalysis = node;
+    this._setState();
+  }
+
+  setSelectedPath(path) {
+    this.state.selectedPath = path;
+    this._setState();
+  }
+
+  removeSelectedPath() {
+    this.state.selectedPath = null;
     this._setState();
   }
 }

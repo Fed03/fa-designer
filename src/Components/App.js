@@ -15,6 +15,7 @@ import { Instructions } from "./Instructions";
 import { withStore } from "../Services/Store";
 import { SelectInput } from "./SelectInput";
 import { AnalysisService } from "../Services/AnalysisService";
+import { PathsList } from "./PathsList";
 
 class App extends Component {
   GraphRef = React.createRef();
@@ -96,9 +97,16 @@ class App extends Component {
   };
 
   renderPathsFound() {
+    const { store } = this.props;
     const { pathsFound } = this.state;
     if (pathsFound) {
-      //return <PathsList />;
+      return (
+        <PathsList
+          paths={pathsFound}
+          onPathSelection={store.setSelectedPath.bind(store)}
+          onPathBlur={store.removeSelectedPath.bind(store)}
+        />
+      );
     }
   }
 

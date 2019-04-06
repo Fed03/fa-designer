@@ -15,7 +15,7 @@ class Edge extends Component {
   }
   render() {
     const {
-      model: { edge },
+      model: { edge, isPartOfAnalysisPath },
       config
     } = this.props;
     if (!edge) return null;
@@ -35,7 +35,8 @@ class Edge extends Component {
           model={edge}
           config={config}
           className={classnames({
-            "edge-selected": edge.selected
+            "edge-selected": edge.selected,
+            "part-of-analysis-path": isPartOfAnalysisPath
           })}
         />
 
@@ -92,7 +93,13 @@ class Edge extends Component {
   }
 }
 
-export default withStore(Edge, (store, props) => ({
-  edge: store.getEdgeById(props.edgeId),
-  analyzeMode: store.state.analyzeMode
-}));
+export default withStore(Edge, (store, props) => {
+  const analyzeMode = store.state.analyzeMode;
+  const path = store.state.selectedPath;
+  const edge = store.getEdgeById(props.edgeId);
+  return {
+    edge,
+    analyzeMode,
+    isPartOfAnalysisPath: analyzeMode && path && path.containsEdge(edge)
+  };
+});
