@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import classnames from "classnames";
 
 class ArrowHead extends Component {
   get viewBox() {
@@ -16,14 +17,16 @@ class ArrowHead extends Component {
   }
 
   render() {
+    const { id, markerSize, className } = this.props;
     return (
       <marker
-        id={this.props.id}
+        id={id}
         viewBox={this.viewBox}
         refX={this.refX}
         orient="auto"
-        markerWidth={this.props.markerSize}
-        markerHeight={this.props.markerSize}
+        markerWidth={markerSize}
+        markerHeight={markerSize}
+        className={classnames("arrow-head", className)}
       >
         <path d={this.pathDefinition} />
       </marker>

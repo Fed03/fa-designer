@@ -1,23 +1,36 @@
 @import "./vars";
 
 #graph-root {
-  .edge {
-    stroke: $edge-color;
-    marker-end: url(#edge-arrow);
+  .base-edge-group {
+    cursor: pointer;
+
+    .edge {
+      stroke: $edge-color;
+    }
+
+    .arrow-head {
+      fill: $edge-color;
+    }
 
     &.edge-selected {
-      stroke: $selected-edge-color;
-      marker-end: url(#selected-edge-arrow);
-      filter: url(#drop-shadow-filter);
+      .edge {
+        stroke: $selected-edge-color;
+        filter: url(#drop-shadow-filter);
+      }
+
+      .arrow-head {
+        fill: $selected-edge-color;
+      }
     }
 
     &.part-of-analysis-path {
-      stroke: blue;
+      .edge {
+        stroke: blue;
+      }
+      .arrow-head {
+        fill: blue;
+      }
     }
-  }
-
-  .base-edge-group {
-    cursor: pointer;
   }
   .edge-group {
     .editable-input-background {

@@ -13,7 +13,7 @@ import React, { Component } from "react";
 import { drag as d3Drag } from "d3-drag";
 import { zoom as d3Zoom } from "d3-zoom";
 import { withStore } from "../Services/Store";
-import { Background, ArrowHead, DropShadowFilter } from "./Defs";
+import { Background, DropShadowFilter } from "./Defs";
 
 class Graph extends Component {
   canvasRef = React.createRef();
@@ -87,8 +87,6 @@ class Graph extends Component {
     return (
       <svg id={config.graphId} ref={this.svgRef}>
         <defs ref={this.defRef}>
-          <ArrowHead markerSize={config.markerSize} id="edge-arrow" />
-          <ArrowHead markerSize={config.markerSize} id="selected-edge-arrow" />
           <DropShadowFilter id={config.dropShadowId} />
         </defs>
 
