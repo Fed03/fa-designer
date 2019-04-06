@@ -11,6 +11,7 @@ import uuid from "uuid/v1";
 import config from "../Config";
 import { SelectionBox } from "../Utils/SelectionBox";
 import React, { Component } from "react";
+import { AnalysisService } from "./AnalysisService";
 
 class Store {
   state = {
@@ -23,7 +24,8 @@ class Store {
     altKey: false,
     analyzeMode: false,
     nodeSelectedForAnalysis: null,
-    selectedPath: null
+    selectedPath: null,
+    pathsFound: null
   };
   candidateSrcNode = null;
   candidateTrgNode = null;
@@ -339,11 +341,14 @@ class Store {
     this.deselectAll();
     this.state.analyzeMode = !this.state.analyzeMode;
     this.state.selectedPath = null;
+    this.state.pathsFound = null;
     this._setState();
   }
 
   setNodeSelectedForAnalysis(node) {
     this.state.nodeSelectedForAnalysis = node;
+    this.state.pathsFound = null;
+    this.state.selectedPath = null;
     this._setState();
   }
 
@@ -355,6 +360,18 @@ class Store {
   removeSelectedPath() {
     this.state.selectedPath = null;
     this._setState();
+  }
+
+  runAnalysis() {
+    const { nodes, edges, nodeSelectedForAnalysis } = this.state;
+    if (nodeSelectedForAnalysis) {
+      const paths = new AnalysisService(nodes, edges).getSimplePathsLeadingTo(
+        nodeSelectedForAnalysis
+      );
+      this.state.pathsFound = paths;
+
+      this._setState();
+    }
   }
 }
 

@@ -14,18 +14,11 @@ import { Drawer } from "./Drawer";
 import { Instructions } from "./Instructions";
 import { withStore } from "../Services/Store";
 import { SelectInput } from "./SelectInput";
-import { AnalysisService } from "../Services/AnalysisService";
 import { PathsList } from "./PathsList";
 
 class App extends Component {
   GraphRef = React.createRef();
   FitService = new FitGraphService(config.minZoom, config.maxZoom);
-  constructor(props) {
-    super(props);
-    this.state = {
-      pathsFound: null
-    };
-  }
 
   componentDidMount() {
     setTimeout(() => this.fitEntities(), 1000);
@@ -87,22 +80,18 @@ class App extends Component {
   }
 
   startAnalysis = () => {
-    const { nodes, edges, nodeSelectedForAnalysis } = this.props.model;
-    if (nodeSelectedForAnalysis) {
-      const paths = new AnalysisService(nodes, edges).getSimplePathsLeadingTo(
-        nodeSelectedForAnalysis
-      );
-      this.setState({ pathsFound: paths });
-    }
+    this.props.store.runAnalysis();
   };
 
   renderPathsFound() {
-    const { store } = this.props;
-    const { pathsFound } = this.state;
-    if (pathsFound) {
+    const {
+      store,
+      model: { analysisPaths }
+    } = this.props;
+    if (analysisPaths) {
       return (
         <PathsList
-          paths={pathsFound}
+          paths={analysisPaths}
           onPathSelection={store.setSelectedPath.bind(store)}
           onPathBlur={store.removeSelectedPath.bind(store)}
         />
@@ -176,5 +165,6 @@ export default withStore(App, store => ({
   inAnalyzeMode: store.state.analyzeMode,
   nodes: store.state.nodes,
   edges: store.state.edges,
-  nodeSelectedForAnalysis: store.state.nodeSelectedForAnalysis
+  nodeSelectedForAnalysis: store.state.nodeSelectedForAnalysis,
+  analysisPaths: store.state.pathsFound
 }));
