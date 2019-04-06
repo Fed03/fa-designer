@@ -25,10 +25,12 @@
 
     &.part-of-analysis-path {
       .edge {
-        stroke: blue;
+        stroke: $node-analysis-color;
+        stroke-dasharray: 20;
+        animation: moveStroke 800ms linear infinite;
       }
       .arrow-head {
-        fill: blue;
+        fill: $node-analysis-color;
       }
     }
   }
@@ -39,5 +41,14 @@
       fill: #f5f5f5;
       fill-opacity: 0.7;
     }
+  }
+}
+
+@keyframes moveStroke {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }

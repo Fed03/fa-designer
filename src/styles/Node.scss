@@ -22,7 +22,6 @@
     .anchor-point {
       stroke: $node-border-color;
       stroke-width: 2;
-      // fill: #e3f2fd;
       fill: lighten($node-color, 30);
     }
 
@@ -65,7 +64,7 @@
 
     &.node-selected-for-analysis {
       .node {
-        fill: #ba68c8;
+        fill: $node-analysis-color;
         stroke: #212529;
       }
       .final-node-marker {
