@@ -128,12 +128,14 @@ class Node extends Component {
 
   selectNode() {
     const {
-      model: { node },
+      model: { node, isSelectedForAnalysis, analyzeMode },
       store
     } = this.props;
 
-    store.selectSingleNode(node);
-    this.moveToForeGround();
+    if (!node.selected || (analyzeMode && !isSelectedForAnalysis)) {
+      store.selectSingleNode(node);
+      this.moveToForeGround();
+    }
   }
 
   moveToForeGround() {

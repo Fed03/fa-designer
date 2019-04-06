@@ -87,7 +87,7 @@ class Store {
       this.deselectAll();
       node.selected = true;
       this._setState();
-    } else {
+    } else if (!node.isInitial) {
       this.setNodeSelectedForAnalysis(node);
     }
   }
@@ -150,7 +150,7 @@ class Store {
     if (!this.state.analyzeMode) {
       const { candidateSrcNode, candidateTrgNode } = this;
       if (candidateTrgNode) {
-        this.createNodesLink(candidateSrcNode, candidateTrgNode);
+        this._createNodesLink(candidateSrcNode, candidateTrgNode);
       }
       this.state.creationEdge = null;
       this.candidateSrcNode = null;
