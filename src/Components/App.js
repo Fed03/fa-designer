@@ -14,10 +14,17 @@ import { Drawer } from "./Drawer";
 import { Instructions } from "./Instructions";
 import { withStore } from "../Services/Store";
 import { SelectInput } from "./SelectInput";
+import { AnalysisService } from "../Services/AnalysisService";
 
 class App extends Component {
   GraphRef = React.createRef();
   FitService = new FitGraphService(config.minZoom, config.maxZoom);
+  constructor(props) {
+    super(props);
+    this.state = {
+      pathsFound: null
+    };
+  }
 
   componentDidMount() {
     setTimeout(() => this.fitEntities(), 1000);
@@ -70,8 +77,29 @@ class App extends Component {
           valueSelector={node => node.id}
           labelSelector={node => node.data.label}
         />
+        <button type="button" onClick={this.startAnalysis}>
+          Run analysis
+        </button>
+        {this.renderPathsFound()}
       </section>
     );
+  }
+
+  startAnalysis = () => {
+    const { nodes, edges, nodeSelectedForAnalysis } = this.props.model;
+    if (nodeSelectedForAnalysis) {
+      const paths = new AnalysisService(nodes, edges).getSimplePathsLeadingTo(
+        nodeSelectedForAnalysis
+      );
+      this.setState({ pathsFound: paths });
+    }
+  };
+
+  renderPathsFound() {
+    const { pathsFound } = this.state;
+    if (pathsFound) {
+      //return <PathsList />;
+    }
   }
 
   handleSelectChange = selectedNode => {
@@ -139,5 +167,6 @@ class App extends Component {
 export default withStore(App, store => ({
   inAnalyzeMode: store.state.analyzeMode,
   nodes: store.state.nodes,
+  edges: store.state.edges,
   nodeSelectedForAnalysis: store.state.nodeSelectedForAnalysis
 }));
