@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import App from "./Components/App";
 import localforage from "localforage";
 import { store } from "./Services/Store";
+import "typeface-roboto";
 import "bootstrap/dist/css/bootstrap-reboot.css";
 import "bootstrap/dist/css/bootstrap-grid.css";
 import "./index.css";
