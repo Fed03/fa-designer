@@ -4,7 +4,6 @@ import { BottomBar } from "./BottomBar";
 import "../styles/App.scss";
 import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
-import { store } from "../Services/Store";
 import { select as d3Select } from "d3-selection";
 import { ImageSaver } from "../Services/ImageSaver";
 import { GraphSerializer } from "../Services/GraphSerializer";
@@ -13,8 +12,7 @@ import KeyHandler, { KEYDOWN, KEYUP } from "react-key-handler";
 import { Drawer } from "./Drawer";
 import { Instructions } from "./Instructions";
 import { withStore } from "../Services/Store";
-import { SelectInput } from "./SelectInput";
-import { PathsList } from "./PathsList";
+import AnalysisPanel from "./Analysis/AnalysisPanel";
 
 class App extends Component {
   GraphRef = React.createRef();
@@ -25,11 +23,16 @@ class App extends Component {
   }
 
   render() {
+    const {
+      model: { inAnalyzeMode },
+      store
+    } = this.props;
     return (
       <Drawer
-        isOpen={this.props.model.inAnalyzeMode}
+        isOpen={inAnalyzeMode}
         width={400}
-        drawerContent={this.renderDrawerContent()}
+        closeDrawer={this.switchToAnalysisMode}
+        drawerContent={closeBtn => <AnalysisPanel closeBtn={closeBtn} />}
       >
         <KeyHandler
           keyEventName={KEYDOWN}
@@ -56,52 +59,6 @@ class App extends Component {
       </Drawer>
     );
   }
-
-  renderDrawerContent() {
-    const { nodes, nodeSelectedForAnalysis } = this.props.model;
-    const selectableNodes = nodes.filter(n => !n.isInitial);
-    return (
-      <section>
-        <h2>Analyze paths</h2>
-        <SelectInput
-          defaultOption="Chose node..."
-          selectedValue={nodeSelectedForAnalysis}
-          data={selectableNodes}
-          onChange={this.handleSelectChange}
-          valueSelector={node => node.id}
-          labelSelector={node => node.data.label}
-        />
-        <button type="button" onClick={this.startAnalysis}>
-          Run analysis
-        </button>
-        {this.renderPathsFound()}
-      </section>
-    );
-  }
-
-  startAnalysis = () => {
-    this.props.store.runAnalysis();
-  };
-
-  renderPathsFound() {
-    const {
-      store,
-      model: { analysisPaths }
-    } = this.props;
-    if (analysisPaths) {
-      return (
-        <PathsList
-          paths={analysisPaths}
-          onPathSelection={store.setSelectedPath.bind(store)}
-          onPathBlur={store.removeSelectedPath.bind(store)}
-        />
-      );
-    }
-  }
-
-  handleSelectChange = selectedNode => {
-    this.props.store.setNodeSelectedForAnalysis(selectedNode);
-  };
 
   switchToAnalysisMode = () => {
     this.props.store.toggleAnalysisMode();
@@ -162,9 +119,5 @@ class App extends Component {
 }
 
 export default withStore(App, store => ({
-  inAnalyzeMode: store.state.analyzeMode,
-  nodes: store.state.nodes,
-  edges: store.state.edges,
-  nodeSelectedForAnalysis: store.state.nodeSelectedForAnalysis,
-  analysisPaths: store.state.pathsFound
+  inAnalyzeMode: store.state.analyzeMode
 }));

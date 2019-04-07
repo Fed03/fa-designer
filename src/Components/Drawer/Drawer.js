@@ -1,6 +1,7 @@
-import "../styles/Drawer.scss";
+import "../../styles/Drawer.scss";
 import React, { Component } from "react";
 import { Spring } from "react-spring/renderprops";
+import { CloseButton } from "./CloseButton";
 
 class Drawer extends Component {
   render() {
@@ -17,7 +18,9 @@ class Drawer extends Component {
             id="drawer-wrapper"
             style={{ transform: `translateX(${style.transformX}px)` }}
           >
-            <aside style={{ minWidth: `${width}px` }}>{drawerContent}</aside>
+            <aside className="drawer" style={{ minWidth: `${width}px` }}>
+              {drawerContent(this.closeBtn)}
+            </aside>
             <section style={{ width: `calc(100vw - ${style.width})` }}>
               {children}
             </section>
@@ -26,6 +29,8 @@ class Drawer extends Component {
       </Spring>
     );
   }
+
+  closeBtn = <CloseButton onClick={this.props.closeDrawer} />;
 }
 
 export { Drawer };

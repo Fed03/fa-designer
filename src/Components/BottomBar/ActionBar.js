@@ -18,7 +18,7 @@ class ActionBar extends Component {
             icon={faQuestion}
             size="2x"
             fixedWidth
-            className="icon icon-default"
+            className="btn-icon icon-default"
           />
           {/* <FontAwesomeIcon
               icon={faTimes}
@@ -32,7 +32,7 @@ class ActionBar extends Component {
             icon={faExpand}
             size="2x"
             fixedWidth
-            className="icon"
+            className="btn-icon"
           />
         </div>
         <div data-tip="Export as PNG" onClick={this.props.onDownloadImgClick}>
@@ -40,7 +40,7 @@ class ActionBar extends Component {
             icon={faFileImage}
             size="2x"
             fixedWidth
-            className="icon"
+            className="btn-icon"
           />
         </div>
         <div data-tip="Analyze Graph" onClick={this.props.onAnalyzeDiagram}>
@@ -48,7 +48,7 @@ class ActionBar extends Component {
             icon={faProjectDiagram}
             size="2x"
             fixedWidth
-            className="icon"
+            className="btn-icon"
           />
         </div>
       </aside>

@@ -7,15 +7,6 @@
 
   .action-bar {
     padding: 10px 0;
-    .icon {
-      color: $primary-accent-color;
-      transition: color 0.25s;
-      cursor: pointer;
-
-      &:hover {
-        color: inherit;
-      }
-    }
   }
 
   @media (max-width: 1280px) {
