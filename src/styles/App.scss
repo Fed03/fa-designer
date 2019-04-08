@@ -9,7 +9,7 @@
 span.key-indicator {
   display: inline-block;
   padding: 3px 5px;
-  font-size: 0.9em;
+  font-size: 0.9rem;
   line-height: 1;
   color: #444d56;
   vertical-align: middle;
@@ -54,8 +54,8 @@ select {
 .main-title {
   background-color: $primary-color;
   font-weight: 300;
-  font-size: 2em;
-  padding: 0.2em 0.4em;
+  font-size: 2rem;
+  padding: 0.4rem 0.8rem;
   border-bottom: 3px solid $primary-accent-color;
   color: #fff;
 }
