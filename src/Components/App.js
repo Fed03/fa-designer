@@ -13,6 +13,7 @@ import { Drawer } from "./Drawer";
 import { Instructions } from "./Instructions";
 import { withStore } from "../Services/Store";
 import AnalysisPanel from "./Analysis/AnalysisPanel";
+import { ActionBar } from "./ActionBar";
 
 class App extends Component {
   GraphRef = React.createRef();
@@ -33,6 +34,7 @@ class App extends Component {
         width={400}
         closeDrawer={this.switchToAnalysisMode}
         drawerContent={closeBtn => <AnalysisPanel closeBtn={closeBtn} />}
+        onAnimationEnd={this.fitEntities}
       >
         <KeyHandler
           keyEventName={KEYDOWN}
@@ -46,16 +48,21 @@ class App extends Component {
         />
 
         <main>
+          <ActionBar
+            onFitClick={this.fitEntities}
+            onDownloadImgClick={this.downloadGraph}
+            onAnalyzeDiagram={this.switchToAnalysisMode}
+          />
           <Graph ref={this.GraphRef} />
-          <BottomBar
+          {/* <BottomBar
             onFitClick={this.fitEntities}
             onDownloadImgClick={this.downloadGraph}
             onAnalyzeDiagram={this.switchToAnalysisMode}
           >
             <Instructions />
-          </BottomBar>
+          </BottomBar> */}
         </main>
-        <ReactTooltip type="dark" effect="solid" place="top" />
+        <ReactTooltip type="dark" effect="solid" place="right" />
       </Drawer>
     );
   }

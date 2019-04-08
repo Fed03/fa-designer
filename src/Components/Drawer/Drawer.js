@@ -5,13 +5,20 @@ import { CloseButton } from "./CloseButton";
 
 class Drawer extends Component {
   render() {
-    const { width, isOpen, children, drawerContent } = this.props;
+    const {
+      width,
+      isOpen,
+      children,
+      drawerContent,
+      onAnimationEnd
+    } = this.props;
     return (
       <Spring
         to={{
           width: isOpen ? `${width}px` : "0px",
           transformX: isOpen ? 0 : -width
         }}
+        onRest={onAnimationEnd}
       >
         {style => (
           <div
