@@ -13,7 +13,9 @@ class AnalysisPanel extends Component {
     const selectableNodes = nodes.filter(n => !n.isInitial);
     return (
       <section className="analysis-panel">
-        <h2 className="analysis-title">Analyze paths {this.props.closeBtn}</h2>
+        <h2 className="analysis-title main-title">
+          Analyze paths {this.props.closeBtn}
+        </h2>
         <div className="analysis-content">
           <div className="card">
             <h3 className="card-title">Find paths leading to</h3>
@@ -62,11 +64,13 @@ class AnalysisPanel extends Component {
           <h3 className="card-title">
             Paths leading to node {nodeSelectedForAnalysis.data.label}
           </h3>
-          <PathsList
-            paths={analysisPaths}
-            onPathSelection={store.setSelectedPath.bind(store)}
-            onPathBlur={store.removeSelectedPath.bind(store)}
-          />
+          <div className="card-content">
+            <PathsList
+              paths={analysisPaths}
+              onPathSelection={store.setSelectedPath.bind(store)}
+              onPathBlur={store.removeSelectedPath.bind(store)}
+            />
+          </div>
         </section>
       );
     }

@@ -25,7 +25,7 @@ class Drawer extends Component {
             id="drawer-wrapper"
             style={{ transform: `translateX(${style.transformX}px)` }}
           >
-            <aside className="drawer" style={{ minWidth: `${width}px` }}>
+            <aside className="drawer" style={{ width: `${width}px` }}>
               {drawerContent(this.closeBtn)}
             </aside>
             <section style={{ width: `calc(100vw - ${style.width})` }}>

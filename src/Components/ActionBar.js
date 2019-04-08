@@ -51,7 +51,7 @@ class ActionBar extends Component {
         <div
           data-tip="Get started"
           className="icon-container"
-          onClick={this.props.toggleBar}
+          onClick={this.props.onToggleInstructions}
         >
           <FontAwesomeIcon
             icon={faQuestion}

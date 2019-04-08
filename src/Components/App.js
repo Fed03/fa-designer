@@ -1,6 +1,5 @@
 import Graph from "./Graph";
 import config from "../Config";
-import { BottomBar } from "./BottomBar";
 import "../styles/App.scss";
 import React, { Component } from "react";
 import ReactTooltip from "react-tooltip";
@@ -19,6 +18,11 @@ class App extends Component {
   GraphRef = React.createRef();
   FitService = new FitGraphService(config.minZoom, config.maxZoom);
 
+  constructor(props) {
+    super(props);
+    this.state = { showInstructions: false };
+  }
+
   componentDidMount() {
     setTimeout(() => this.fitEntities(), 1000);
   }
@@ -28,12 +32,13 @@ class App extends Component {
       model: { inAnalyzeMode },
       store
     } = this.props;
+    const { showInstructions } = this.state;
     return (
       <Drawer
-        isOpen={inAnalyzeMode}
+        isOpen={inAnalyzeMode || showInstructions}
         width={400}
         closeDrawer={this.switchToAnalysisMode}
-        drawerContent={closeBtn => <AnalysisPanel closeBtn={closeBtn} />}
+        drawerContent={this.drawerContent}
         onAnimationEnd={this.fitEntities}
       >
         <KeyHandler
@@ -52,6 +57,7 @@ class App extends Component {
             onFitClick={this.fitEntities}
             onDownloadImgClick={this.downloadGraph}
             onAnalyzeDiagram={this.switchToAnalysisMode}
+            onToggleInstructions={this.showInstructions}
           />
           <Graph ref={this.GraphRef} />
           {/* <BottomBar
@@ -67,8 +73,23 @@ class App extends Component {
     );
   }
 
+  drawerContent = closeBtn => {
+    const { showInstructions } = this.state;
+    return showInstructions ? (
+      <Instructions />
+    ) : (
+      <AnalysisPanel closeBtn={closeBtn} />
+    );
+  };
+
+  showInstructions = () => {
+    const { showInstructions } = this.state;
+    this.setState({ showInstructions: !showInstructions });
+  };
+
   switchToAnalysisMode = () => {
     this.props.store.toggleAnalysisMode();
+    this.setState({ showInstructions: false });
   };
 
   downloadGraph = () => {
