@@ -13,6 +13,7 @@ import { Instructions } from "./Instructions";
 import { withStore } from "../Services/Store";
 import AnalysisPanel from "./Analysis/AnalysisPanel";
 import { ActionBar } from "./ActionBar";
+import { Transition } from "react-spring/renderprops";
 
 class App extends Component {
   GraphRef = React.createRef();
@@ -37,7 +38,7 @@ class App extends Component {
       <Drawer
         isOpen={inAnalyzeMode || showInstructions}
         width={400}
-        closeDrawer={this.switchToAnalysisMode}
+        closeDrawer={store.switchToDesignMode.bind(store)}
         drawerContent={this.drawerContent}
         onAnimationEnd={this.fitEntities}
       >
@@ -56,17 +57,10 @@ class App extends Component {
           <ActionBar
             onFitClick={this.fitEntities}
             onDownloadImgClick={this.downloadGraph}
-            onAnalyzeDiagram={this.switchToAnalysisMode}
-            onToggleInstructions={this.showInstructions}
+            onAnalyzeDiagram={this.toggleAnalysisMode}
+            onToggleInstructions={this.toggleInstructions}
           />
           <Graph ref={this.GraphRef} />
-          {/* <BottomBar
-            onFitClick={this.fitEntities}
-            onDownloadImgClick={this.downloadGraph}
-            onAnalyzeDiagram={this.switchToAnalysisMode}
-          >
-            <Instructions />
-          </BottomBar> */}
         </main>
         <ReactTooltip type="dark" effect="solid" place="right" />
       </Drawer>
@@ -75,21 +69,54 @@ class App extends Component {
 
   drawerContent = closeBtn => {
     const { showInstructions } = this.state;
-    return showInstructions ? (
-      <Instructions />
-    ) : (
-      <AnalysisPanel closeBtn={closeBtn} />
+    return (
+      <Transition
+        items={showInstructions}
+        from={{
+          position: "absolute",
+          width: "100%",
+          transform: "translateX(400px)"
+        }}
+        enter={{ transform: "translateX(0)" }}
+        leave={{ transform: "translateX(-400px)" }}
+      >
+        {showInstructions =>
+          showInstructions
+            ? props => (
+                <div style={props}>
+                  <Instructions />
+                </div>
+              )
+            : props => (
+                <div style={props}>
+                  <AnalysisPanel closeBtn={closeBtn} />
+                </div>
+              )
+        }
+      </Transition>
     );
   };
 
-  showInstructions = () => {
+  toggleInstructions = () => {
     const { showInstructions } = this.state;
+    if (!showInstructions) {
+      this.props.store.switchToDesignMode();
+    }
     this.setState({ showInstructions: !showInstructions });
   };
 
-  switchToAnalysisMode = () => {
-    this.props.store.toggleAnalysisMode();
-    this.setState({ showInstructions: false });
+  toggleAnalysisMode = () => {
+    const {
+      model: { inAnalyzeMode },
+      store
+    } = this.props;
+
+    if (inAnalyzeMode) {
+      store.switchToDesignMode();
+    } else {
+      store.switchToAnalysisMode();
+      this.setState({ showInstructions: false });
+    }
   };
 
   downloadGraph = () => {

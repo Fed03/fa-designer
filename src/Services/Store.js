@@ -337,9 +337,14 @@ class Store {
     this._setState();
   }
 
-  toggleAnalysisMode() {
+  switchToAnalysisMode() {
     this.deselectAll();
-    this.state.analyzeMode = !this.state.analyzeMode;
+    this.state.analyzeMode = true;
+    this._setState();
+  }
+
+  switchToDesignMode() {
+    this.state.analyzeMode = false;
     this.state.selectedPath = null;
     this.state.pathsFound = null;
     this._setState();
