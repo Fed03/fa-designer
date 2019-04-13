@@ -35,15 +35,28 @@ class EditableLabel extends Component {
     }
   }
 
+  get label() {
+    const { label, wrap, x, y } = this.props;
+    if (wrap) {
+      return label.split(" ").map((word, idx) => (
+        <tspan key={idx} x={x} y={y + idx * 16}>
+          {word}
+        </tspan>
+      ));
+    }
+
+    return label;
+  }
+
   render() {
-    const { x, y, label } = this.props;
+    const { x, y } = this.props;
     return (
       <g className="editable-input">
         {this._hasBackground && (
           <rect className="editable-input-background" ref={this.bg} />
         )}
         <text ref={this.labelRef} x={x} y={y} textAnchor="middle">
-          {label}
+          {this.label}
         </text>
         {this.renderTextInput()}
       </g>

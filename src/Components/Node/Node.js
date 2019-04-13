@@ -203,6 +203,7 @@ class Node extends Component {
           label={node.data.label}
           isEditing={this.state.isEditing}
           onChange={this.finishEditing}
+          wrap
         />
       </g>
     );
