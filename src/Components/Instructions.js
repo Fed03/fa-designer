@@ -5,7 +5,7 @@ class Instructions extends Component {
   render() {
     return (
       <div>
-        <h2 className="main-title">How to get started</h2>
+        <h2 className="main-title">Beginner tutorial</h2>
         <div className="instructions">
           <div className="card">
             <h3 className="card-title">Creating and connecting States</h3>
@@ -18,14 +18,14 @@ class Instructions extends Component {
               </p>
               <p>Three things happened:</p>
               <ol>
-                <li>A state has been created</li>
+                <li>A state has been created.</li>
                 <li>
                   Since it is the first in the graph, it is marked as{" "}
                   <strong>initial</strong>, that is its color is red.
                 </li>
                 <li>
                   A textbox appeared in order to let you type the name of the
-                  state
+                  state.
                 </li>
               </ol>
               <p>
@@ -67,8 +67,8 @@ class Instructions extends Component {
                 expects from a graphical editor.
               </p>
               <ul>
-                <li>Dragging the canvas allows you to move freely around</li>
-                <li>Every state can be moved through dragging too</li>
+                <li>Dragging the canvas allows you to move freely around.</li>
+                <li>Every state can be moved through dragging too.</li>
               </ul>
               <p>
                 In addition, holding the{" "}
@@ -77,31 +77,28 @@ class Instructions extends Component {
                 together are grouped; this means that moving one state will move
                 the others accordingly.
               </p>
-
               <p>
                 Zoom is present too, and it is enabled through the mouse{" "}
                 <span className="key-indicator">scroll</span>
               </p>
-
               <p>
                 If playing with translations and zooming took you too far from
                 your work, you can simply refocus to the graph using the{" "}
-                <strong>fit button</strong> placed just above.
+                <strong>fit button</strong> placed here on the right.
               </p>
             </div>
           </div>
           <div className="card">
-            <h3 className="card-title">Deleting objects</h3>
+            <h3 className="card-title">Deleting & Editing</h3>
             <div className="card-content">
               <p>
                 Selecting single objects is just a{" "}
                 <span className="key-indicator">click</span> away! Or take
                 advantage of the multi-selection box aforementioned.
                 <br />
-                Once selected, any objects can be removed from grpah by pressing
+                Once selected, any objects can be removed from graph by pressing
                 the <span className="key-indicator">Del</span> key.
               </p>
-              <h3>Editing graph</h3>
               <p>
                 Every label can be edited through{" "}
                 <span className="key-indicator">dblClick</span> on the
@@ -113,6 +110,40 @@ class Instructions extends Component {
                 <br />
                 If, instead, you want to mark or unmark a state as final you can{" "}
                 <span className="key-indicator">Alt+click</span> on it.
+              </p>
+            </div>
+          </div>
+          <div className="card">
+            <h3 className="card-title">Analyze Paths</h3>
+            <div className="card-content">
+              <p>
+                When you are done with designing your graph, you might want to
+                answer a specific question:
+              </p>
+              <blockquote>
+                "Given a graph, let me see all the paths leading to any choseen
+                node from the initial one."
+              </blockquote>
+              <p>
+                In order to answer this question you can enter{" "}
+                <strong>Analysis Mode</strong> clicking on the corresponding
+                button in the action bar.
+              </p>
+              <p>
+                Upon activating this mode, the graph becames uneditable and you
+                are presented with dropdown list used to select the target state
+                in order to calculate all the paths leading to it.
+              </p>
+              <p>
+                Just select a state an click on the <strong>run</strong> button!
+              </p>
+              <p>
+                A box slides in showing a list of all possible path leading to
+                the chosen state.
+                <br />
+                Hovering on any of them will highlight the corresponding path on
+                the graph! If you need to <em>lock</em> the highlight just click
+                on it instead of hovering.
               </p>
             </div>
           </div>
