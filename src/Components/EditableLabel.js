@@ -37,7 +37,7 @@ class EditableLabel extends Component {
 
   get label() {
     const { label, wrap, x, y } = this.props;
-    if (wrap) {
+    if (label && wrap) {
       return label.split(" ").map((word, idx) => (
         <tspan key={idx} x={x} y={y + idx * 16}>
           {word}

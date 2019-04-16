@@ -21,7 +21,7 @@ class Instructions extends Component {
                 <li>A state has been created.</li>
                 <li>
                   Since it is the first in the graph, it is marked as{" "}
-                  <strong>initial</strong>, that is its color is red.
+                  <strong>initial</strong>, that is, its color is red.
                 </li>
                 <li>
                   A textbox appeared in order to let you type the name of the
@@ -36,7 +36,7 @@ class Instructions extends Component {
                 <span className="key-indicator">Alt+click</span>.
               </p>
               <p>
-                You surely have noted that when you{" "}
+                You surely have noticed that when you{" "}
                 <span className="key-indicator">hover</span> on a state, 4
                 smaller circles appear on the cardinal points.
                 <br />
@@ -47,13 +47,13 @@ class Instructions extends Component {
                 Try to <span className="key-indicator">drag</span> one of these
                 anchor points. An arrow appears!
                 <br />
-                Then release the mouse when above the other state: you have
-                succesfuly connected 2 states. In addition, a textbox appeared
+                Then, when above the other state, release the mouse: you have
+                successfully connected 2 states. In addition, a textbox appeared
                 here too.
               </p>
               <p>
-                Last but not least, to create reentrant transition - that is an
-                edge starting and ending to the same state - just{" "}
+                Last but not least, to create reentrant transition - that is, an
+                edge starting and ending in the same state - just{" "}
                 <span className="key-indicator">Alt+click</span> on an Anchor
                 point.
               </p>
@@ -79,10 +79,10 @@ class Instructions extends Component {
               </p>
               <p>
                 Zoom is present too, and it is enabled through the mouse{" "}
-                <span className="key-indicator">scroll</span>
+                <span className="key-indicator">scroll</span>.
               </p>
               <p>
-                If playing with translations and zooming took you too far from
+                If playing with translations, and zooming took you too far from
                 your work, you can simply refocus to the graph using the{" "}
                 <strong>fit button</strong> placed here on the right.
               </p>
@@ -93,11 +93,11 @@ class Instructions extends Component {
             <div className="card-content">
               <p>
                 Selecting single objects is just a{" "}
-                <span className="key-indicator">click</span> away! Or take
-                advantage of the multi-selection box aforementioned.
+                <span className="key-indicator">click</span> away! You can also
+                take advantage of the multi-selection box aforementioned.
                 <br />
-                Once selected, any objects can be removed from graph by pressing
-                the <span className="key-indicator">Del</span> key.
+                Once selected, any objects can be removed from the graph by
+                pressing the <span className="key-indicator">Del</span> key.
               </p>
               <p>
                 Every label can be edited through{" "}
@@ -118,32 +118,33 @@ class Instructions extends Component {
             <div className="card-content">
               <p>
                 When you are done with designing your graph, you might want to
-                answer a specific question:
+                answer a specific request:
               </p>
               <blockquote>
-                "Given a graph, let me see all the paths leading to any choseen
-                node from the initial one."
+                "Given a graph, show me all the paths leading to any chosen node
+                from the initial one."
               </blockquote>
               <p>
-                In order to answer this question you can enter{" "}
+                In order to answer this request you can enter{" "}
                 <strong>Analysis Mode</strong> clicking on the corresponding
                 button in the action bar.
               </p>
               <p>
-                Upon activating this mode, the graph becames uneditable and you
-                are presented with dropdown list used to select the target state
-                in order to calculate all the paths leading to it.
+                Upon activating this mode, the graph becomes uneditable and you
+                are presented with a dropdown list used to select the target
+                state in order to calculate all the paths leading to it.
               </p>
               <p>
-                Just select a state an click on the <strong>run</strong> button!
+                Just select a state and click on the <strong>run</strong>{" "}
+                button!
               </p>
               <p>
-                A box slides in showing a list of all possible path leading to
+                A box slides in, showing a list of all possible paths leading to
                 the chosen state.
                 <br />
                 Hovering on any of them will highlight the corresponding path on
-                the graph! If you need to <em>lock</em> the highlight just click
-                on it instead of hovering.
+                the graph! If you need to <em>lock</em> the highlight, just
+                click on it instead of hovering.
               </p>
             </div>
           </div>
